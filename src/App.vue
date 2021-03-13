@@ -31,4 +31,9 @@ export default {
 html {
   overflow-y: auto !important;
 }
+
+#app {
+  background-color: #616161;
+  color: white;
+}
 </style>

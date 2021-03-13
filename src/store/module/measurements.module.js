@@ -9,12 +9,18 @@ const state = {
 };
 
 const getters = {
-  getMeasurements: state => state.measurements
+  getMeasurements: state => state.measurements,
+
+  getLoading: state => state.isLoading
 };
 
 const mutations = {
   setMeasurements(state, measurements) {
     state.measurements = measurements;
+    state.isLoading = false;
+  },
+  error(state, error) {
+    state.error = error;
     state.isLoading = false;
   }
 };

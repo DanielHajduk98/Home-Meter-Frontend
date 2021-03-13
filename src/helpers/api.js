@@ -3,7 +3,7 @@ import axios from "axios";
 const token = localStorage.getItem("token");
 
 const options = {
-  baseURL: "/api/",
+  baseURL: "http://192.168.1.27:81/api/",
   headers: {}
 };
 
