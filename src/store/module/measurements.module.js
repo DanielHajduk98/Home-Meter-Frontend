@@ -1,22 +1,35 @@
 import api from "@/helpers/api";
 
-const namespaced = true;
-
 const state = {
-  measurements: {},
+  temperature: [],
+  movement: [],
+  air_pressure: [],
+  humidity: [],
+  luminosity: [],
+  heatIndex: [],
   isLoading: true,
   error: ""
 };
 
 const getters = {
-  getMeasurements: state => state.measurements,
-
+  temperature: state => state.temperature,
+  movement: state => state.movement,
+  air_pressure: state => state.air_pressure,
+  humidity: state => state.humidity,
+  luminosity: state => state.luminosity,
+  heatIndex: state => state.heatIndex,
   getLoading: state => state.isLoading
 };
 
 const mutations = {
   setMeasurements(state, measurements) {
-    state.measurements = measurements;
+    state.temperature = measurements[0];
+    state.movement = measurements[1];
+    state.luminosity = measurements[2];
+    state.air_pressure = measurements[3];
+    state.humidity = measurements[4];
+    state.heatIndex = measurements[5];
+
     state.isLoading = false;
   },
   error(state, error) {
@@ -26,11 +39,15 @@ const mutations = {
 };
 
 const actions = {
-  fetchMeasurements({ commit }) {
+  fetchMeasurements({ commit }, { from, to }) {
     return new Promise((resolve, reject) => {
       api({
         url: `measurement/`,
-        method: "GET"
+        method: "GET",
+        params: {
+          from: from,
+          to: to
+        }
       })
         .then(resp => {
           commit("setMeasurements", resp.data);
@@ -45,7 +62,7 @@ const actions = {
 };
 
 export default {
-  namespaced,
+  namespaced: true,
   actions,
   state,
   mutations,

@@ -2,7 +2,22 @@
   <v-container>
     <v-row>
       <v-col lg="6">
+        <LineChart :chart-data="heatIndexDataSet" :options="options" />
+      </v-col>
+      <v-col lg="6">
         <LineChart :chart-data="temperatureDataSet" :options="options" />
+      </v-col>
+      <v-col lg="6">
+        <LineChart :chart-data="movementDataSet" :options="options" />
+      </v-col>
+      <v-col lg="6">
+        <LineChart :chart-data="luminosityDataSet" :options="options" />
+      </v-col>
+      <v-col lg="6">
+        <LineChart :chart-data="airPressureDataSet" :options="options" />
+      </v-col>
+      <v-col lg="6">
+        <LineChart :chart-data="humidityDataSet" :options="options" />
       </v-col>
     </v-row>
     <!--    <div class="d-flex align-content-center">-->
@@ -13,13 +28,33 @@
 
 <script>
 import LineChart from "@/components/Charts/LineChart";
+import { mapGetters } from "vuex";
+
 export default {
   name: "Dashboard",
   components: { LineChart },
 
   data() {
     return {
-      temperatureDataSet: null,
+      temperatureDataSet: {
+        datasets: [{}]
+      },
+      movementDataSet: {
+        datasets: [{}]
+      },
+      humidityDataSet: {
+        datasets: [{}]
+      },
+      airPressureDataSet: {
+        datasets: [{}]
+      },
+      luminosityDataSet: {
+        datasets: [{}]
+      },
+      heatIndexDataSet: {
+        datasets: [{}]
+      },
+
       options: {
         parsing: {
           xAxisKey: "created_at",
@@ -41,6 +76,13 @@ export default {
           xAxes: [
             {
               type: "time",
+              time: {
+                unit: "minute",
+                displayFormats: {
+                  second: "HH:mm:ss",
+                  minute: "HH:mm"
+                }
+              },
               ticks: {
                 fontColor: "white"
               }
@@ -52,7 +94,7 @@ export default {
   },
 
   created() {
-    this.$store.dispatch("measurements/fetchMeasurements").then(() => {
+    this.$store.dispatch("measurements/fetchMeasurements", {}).then(() => {
       this.fillData();
     });
   },
@@ -62,11 +104,66 @@ export default {
       this.temperatureDataSet = {
         datasets: [
           {
-            label: "temperature",
-            data: this.temperature,
+            label: "Temperature",
+            data: this["measurements/temperature"],
+            fill: false,
+            borderColor: "#FF9800",
+            pointBackgroundColor: "#FF9800"
+          }
+        ]
+      };
+      this.movementDataSet = {
+        datasets: [
+          {
+            label: "Movement",
+            data: this["measurements/movement"],
+            fill: false,
+            borderColor: "#F44336",
+            pointBackgroundColor: "#F44336"
+          }
+        ]
+      };
+      this.humidityDataSet = {
+        datasets: [
+          {
+            label: "Humidity",
+            data: this["measurements/humidity"],
             fill: false,
             borderColor: "#2196F3",
             pointBackgroundColor: "#2196F3"
+          }
+        ]
+      };
+      this.airPressureDataSet = {
+        datasets: [
+          {
+            label: "Air pressure",
+            data: this["measurements/air_pressure"],
+            fill: false,
+            borderColor: "#673AB7",
+            pointBackgroundColor: "#673AB7"
+          }
+        ]
+      };
+      this.luminosityDataSet = {
+        datasets: [
+          {
+            label: "Luminosity",
+            data: this["measurements/luminosity"],
+            fill: false,
+            borderColor: "#FFEB3B",
+            pointBackgroundColor: "#FFEB3B"
+          }
+        ]
+      };
+      this.heatIndexDataSet = {
+        datasets: [
+          {
+            label: "Heat index",
+            data: this["measurements/heatIndex"],
+            fill: false,
+            borderColor: "#009688",
+            pointBackgroundColor: "#009688"
           }
         ]
       };
@@ -74,9 +171,15 @@ export default {
   },
 
   computed: {
-    temperature: function() {
-      return this.$store.getters["measurements/getMeasurements"];
-    },
+    ...mapGetters([
+      "measurements/temperature",
+      "measurements/movement",
+      "measurements/air_pressure",
+      "measurements/humidity",
+      "measurements/luminosity",
+      "measurements/heatIndex"
+    ]),
+
     isLoading: function() {
       return this.$store.getters["measurements/getLoading"];
     }
