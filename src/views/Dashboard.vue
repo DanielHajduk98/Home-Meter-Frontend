@@ -94,7 +94,7 @@ export default {
   },
 
   created() {
-    this.$store.dispatch("measurements/fetchMeasurements", {}).then(() => {
+    this.$store.dispatch("measurements/getToday").then(() => {
       this.fillData();
     });
   },

@@ -39,14 +39,30 @@ const mutations = {
 };
 
 const actions = {
-  fetchMeasurements({ commit }, { from, to }) {
+  getToday({ commit }) {
     return new Promise((resolve, reject) => {
       api({
-        url: `measurement/`,
+        url: `measurement`,
+        method: "GET"
+      })
+        .then(resp => {
+          commit("setMeasurements", resp.data);
+          resolve(resp);
+        })
+        .catch(err => {
+          commit("error", err);
+          reject(err);
+        });
+    });
+  },
+
+  getDay({ commit }, date) {
+    return new Promise((resolve, reject) => {
+      api({
+        url: `measurement/day`,
         method: "GET",
         params: {
-          from: from,
-          to: to
+          date: date
         }
       })
         .then(resp => {
