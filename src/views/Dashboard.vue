@@ -29,6 +29,7 @@
 <script>
 import LineChart from "@/components/Charts/LineChart";
 import { mapGetters } from "vuex";
+import { parseISO } from "date-fns";
 
 export default {
   name: "Dashboard",
@@ -93,13 +94,29 @@ export default {
     };
   },
 
+  watch: {
+    "$route.path": function() {
+      this.fetchData();
+    }
+  },
+
   created() {
-    this.$store.dispatch("measurements/getToday").then(() => {
-      this.fillData();
-    });
+    this.fetchData();
   },
 
   methods: {
+    async fetchData() {
+      let date = this.$route.params.date;
+
+      if (date) {
+        await this.$store.dispatch("measurements/getDay", parseISO(date));
+      } else {
+        await this.$store.dispatch("measurements/getToday");
+      }
+
+      this.fillData();
+    },
+
     fillData() {
       this.temperatureDataSet = {
         datasets: [

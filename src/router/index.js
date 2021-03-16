@@ -6,8 +6,22 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "Home",
+    redirect: "/day"
+  },
+  {
+    path: "/day",
+    name: "Dashboard",
     component: () => import("../views/Dashboard.vue")
+  },
+  {
+    path: "/day/:date",
+    name: "Dashboard",
+    component: () => import("../views/Dashboard.vue")
+  },
+  {
+    path: "/calendar",
+    name: "calendar",
+    component: () => import("../views/Calendar.vue")
   }
 ];
 

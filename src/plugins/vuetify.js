@@ -7,9 +7,13 @@ Vue.use(Vuetify);
 
 export default new Vuetify({
   theme: {
+    options: {
+      customProperties: true
+    },
     themes: {
-      light: {
-        primary: colors.blueGrey.base
+      dark: {
+        primary: colors.blueGrey.base,
+        text: "#fff"
       }
     }
   }
