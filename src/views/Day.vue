@@ -55,11 +55,11 @@
 
 <script>
 import LineChart from "@/components/Charts/LineChart";
-import { addDays } from "date-fns";
+import { parseISO, addDays } from "date-fns";
 import { chartDataMixin } from "@/helpers/chartDataMixin";
 
 export default {
-  name: "Dashboard",
+  name: "Day",
   components: { LineChart },
 
   mixins: [chartDataMixin],
@@ -77,10 +77,13 @@ export default {
 
   methods: {
     async fetchData() {
-      this.min = this.stripToDate(new Date());
+      let date = this.$route.params.date;
+
+      console.log(date);
+      this.min = this.stripToDate(parseISO(this.$route.params.date));
       this.max = addDays(this.min, 1);
 
-      await this.$store.dispatch("measurements/getToday");
+      await this.$store.dispatch("measurements/getDay", date);
 
       this.fillData();
     }

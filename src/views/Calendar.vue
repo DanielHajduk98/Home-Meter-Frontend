@@ -3,17 +3,20 @@
     <div class="calendar">
       <div
         class="day"
-        :class="{ 'day--today': DayIsToday(day) }"
+        :class="{ 'day--today': dayIsToday(day) }"
         v-for="(day, index) in calendar"
         :key="index"
       >
         <router-link
-          v-if="day"
-          :to="'/day/' + formatDate(day)"
+          v-if="day && !isAfterToday(day)"
+          :to="dayIsToday(day) ? '/' : '/day/' + formatDate(day)"
           class="day__content"
         >
           {{ day.getDate() }}
         </router-link>
+        <div v-else class="day__content">
+          {{ day ? day.getDate() : "" }}
+        </div>
       </div>
     </div>
   </v-container>
@@ -29,7 +32,8 @@ import {
   startOfISOWeek,
   endOfISOWeek,
   isToday,
-  format
+  format,
+  isAfter
 } from "date-fns";
 
 export default {
@@ -51,8 +55,12 @@ export default {
       return format(day, "yyyy-MM-dd");
     },
 
-    DayIsToday(day) {
+    dayIsToday(day) {
       return isToday(day);
+    },
+
+    isAfterToday(day) {
+      return isAfter(day, this.today);
     },
 
     createMatrix() {
