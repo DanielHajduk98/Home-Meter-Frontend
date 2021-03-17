@@ -29,7 +29,6 @@
 <script>
 import LineChart from "@/components/Charts/LineChart";
 import { mapGetters } from "vuex";
-import { parseISO } from "date-fns";
 
 export default {
   name: "Dashboard",
@@ -109,7 +108,7 @@ export default {
       let date = this.$route.params.date;
 
       if (date) {
-        await this.$store.dispatch("measurements/getDay", parseISO(date));
+        await this.$store.dispatch("measurements/getDay", date);
       } else {
         await this.$store.dispatch("measurements/getToday");
       }
