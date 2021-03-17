@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from "@/store";
 
 Vue.use(VueRouter);
 
@@ -7,12 +8,20 @@ const routes = [
   {
     path: "/",
     name: "Dashboard",
-    component: () => import("../views/Dashboard.vue")
+    component: () => import("../views/Dashboard.vue"),
+    beforeEnter: (to, from, next) => {
+      store.commit("loader/setLoading", true, { root: true });
+      next();
+    }
   },
   {
     path: "/day/:date",
     name: "Day",
-    component: () => import("../views/Day.vue")
+    component: () => import("../views/Day.vue"),
+    beforeEnter: (to, from, next) => {
+      store.commit("loader/setLoading", true, { root: true });
+      next();
+    }
   },
   {
     path: "/calendar",

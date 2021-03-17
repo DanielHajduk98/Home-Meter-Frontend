@@ -46,10 +46,12 @@ const actions = {
         method: "GET"
       })
         .then(resp => {
+          commit("loader/setLoading", false, { root: true });
           commit("setMeasurements", resp.data);
           resolve(resp);
         })
         .catch(err => {
+          commit("loader/setLoading", false, { root: true });
           commit("error", err);
           reject(err);
         });
@@ -66,10 +68,12 @@ const actions = {
         }
       })
         .then(resp => {
+          commit("loader/setLoading", false, { root: true });
           commit("setMeasurements", resp.data);
           resolve(resp);
         })
         .catch(err => {
+          commit("loader/setLoading", false, { root: true });
           commit("error", err);
           reject(err);
         });

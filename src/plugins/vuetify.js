@@ -13,6 +13,7 @@ export default new Vuetify({
     themes: {
       dark: {
         primary: colors.blueGrey.base,
+        overlay: colors.grey.darken3,
         text: "#fff"
       }
     }
