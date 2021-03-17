@@ -79,7 +79,6 @@ export default {
     async fetchData() {
       let date = this.$route.params.date;
 
-      console.log(date);
       this.min = this.stripToDate(parseISO(this.$route.params.date));
       this.max = addDays(this.min, 1);
 

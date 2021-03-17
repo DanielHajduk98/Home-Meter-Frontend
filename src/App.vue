@@ -10,7 +10,7 @@
         color="overlay"
       >
         <v-progress-circular
-          width="10"
+          width="5"
           :size="100"
           color="white"
           indeterminate
