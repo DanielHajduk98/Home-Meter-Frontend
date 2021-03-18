@@ -1,13 +1,28 @@
 <script>
 import { Line, mixins } from "vue-chartjs";
-const { reactiveProp } = mixins;
 
 export default {
   name: "LineChart",
 
-  data() {
-    return {
-      options: {
+  props: ["title", "min", "max"],
+
+  mixins: [mixins.reactiveProp],
+  extends: Line,
+  mounted() {
+    this.renderChart(this.chartdata, this.options);
+  },
+
+  watch: {
+    min: function() {
+      this.$data._chart.destroy();
+      this.renderChart(this.chartData, this.options);
+    }
+  },
+
+  computed: {
+    options: function() {
+      return {
+        responsive: true,
         title: {
           display: true,
           fontColor: "white",
@@ -47,16 +62,8 @@ export default {
             }
           ]
         }
-      }
-    };
-  },
-
-  props: ["title", "min", "max"],
-
-  mixins: [reactiveProp],
-  extends: Line,
-  mounted() {
-    this.renderChart(this.chartdata, this.options);
+      };
+    }
   }
 };
 </script>

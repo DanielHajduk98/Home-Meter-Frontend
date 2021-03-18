@@ -40,6 +40,8 @@ const mutations = {
 
 const actions = {
   getToday({ commit }) {
+    commit("loader/setLoading", true, { root: true });
+
     return new Promise((resolve, reject) => {
       api({
         url: `measurement`,
@@ -59,6 +61,8 @@ const actions = {
   },
 
   getDay({ commit }, date) {
+    commit("loader/setLoading", true, { root: true });
+
     return new Promise((resolve, reject) => {
       api({
         url: `measurement/day`,

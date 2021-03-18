@@ -1,7 +1,20 @@
 <template>
   <v-container>
     <v-row>
-      <v-col lg="6">
+      <v-col>
+        <header class="d-flex flex-row justify-center align-center mx-n2">
+          <v-btn icon class="mx-2" @click="prev()">
+            <v-icon>mdi-arrow-left-circle</v-icon>
+          </v-btn>
+          <h1 class="mx-2">{{ getDate }}</h1>
+          <v-btn icon class="mx-2" @click="next()" :disabled="nextDisabled">
+            <v-icon>mdi-arrow-right-circle</v-icon>
+          </v-btn>
+        </header>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col md="6" lg="4">
         <LineChart
           :chart-data="heatIndexDataSet"
           title="Heat Index"
@@ -9,7 +22,7 @@
           :max="max"
         />
       </v-col>
-      <v-col lg="6">
+      <v-col md="6" lg="4">
         <LineChart
           :chart-data="temperatureDataSet"
           title="Temperature"
@@ -17,7 +30,7 @@
           :max="max"
         />
       </v-col>
-      <v-col lg="6">
+      <v-col md="6" lg="4">
         <LineChart
           :chart-data="movementDataSet"
           title="Movement"
@@ -25,7 +38,7 @@
           :max="max"
         />
       </v-col>
-      <v-col lg="6">
+      <v-col md="6" lg="4">
         <LineChart
           :chart-data="luminosityDataSet"
           title="Luminosity"
@@ -33,7 +46,7 @@
           :max="max"
         />
       </v-col>
-      <v-col lg="6">
+      <v-col md="6" lg="4">
         <LineChart
           :chart-data="airPressureDataSet"
           title="Air pressure"
@@ -41,7 +54,7 @@
           :max="max"
         />
       </v-col>
-      <v-col lg="6">
+      <v-col md="6" lg="4">
         <LineChart
           :chart-data="humidityDataSet"
           title="Humidity"
@@ -55,7 +68,7 @@
 
 <script>
 import LineChart from "@/components/Charts/LineChart";
-import { parseISO, addDays } from "date-fns";
+import { parseISO, isToday, addDays, format } from "date-fns";
 import { chartDataMixin } from "@/helpers/chartDataMixin";
 
 export default {
@@ -66,25 +79,64 @@ export default {
 
   data() {
     return {
+      date: new Date(),
       min: new Date(),
       max: addDays(new Date(), 1)
     };
   },
 
   created() {
+    this.date = parseISO(this.$route.params.date);
     this.fetchData();
   },
 
-  methods: {
-    async fetchData() {
-      let date = this.$route.params.date;
+  watch: {
+    date: function() {
+      this.fetchData();
+    }
+  },
 
-      this.min = this.stripToDate(parseISO(this.$route.params.date));
+  methods: {
+    formatDate(day) {
+      return format(day, "yyyy-MM-dd");
+    },
+
+    prev() {
+      let date = addDays(this.date, -1);
+
+      this.$router.push("/day/" + this.formatDate(date));
+      this.date = date;
+    },
+
+    next() {
+      let date = addDays(this.date, 1);
+
+      if (isToday(date)) return;
+
+      this.$router.push("/day/" + this.formatDate(date));
+      this.date = date;
+    },
+
+    async fetchData() {
+      this.min = this.stripToDate(this.date);
       this.max = addDays(this.min, 1);
 
-      await this.$store.dispatch("measurements/getDay", date);
+      await this.$store.dispatch(
+        "measurements/getDay",
+        this.$route.params.date
+      );
 
       this.fillData();
+    }
+  },
+
+  computed: {
+    nextDisabled: function() {
+      const nextDate = addDays(this.date, 1);
+      return isToday(nextDate);
+    },
+    getDate: function() {
+      return format(parseISO(this.$route.params.date), "yyyy-MM-dd");
     }
   }
 };
