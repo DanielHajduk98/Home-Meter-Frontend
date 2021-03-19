@@ -1,5 +1,6 @@
 <script>
 import { Line, mixins } from "vue-chartjs";
+import zoomPlugin from "chartjs-plugin-zoom";
 
 export default {
   name: "LineChart",
@@ -9,6 +10,7 @@ export default {
   mixins: [mixins.reactiveProp],
   extends: Line,
   mounted() {
+    this.addPlugin(zoomPlugin);
     this.renderChart(this.chartdata, this.options);
   },
 
@@ -62,6 +64,48 @@ export default {
               }
             }
           ]
+        },
+        plugins: {
+          zoom: {
+            pan: {
+              enabled: false
+            },
+            zoom: {
+              enabled: true,
+
+              drag: true,
+
+              mode: "x",
+
+              overScaleMode: "x",
+
+              rangeMin: {
+                y: null
+              },
+              rangeMax: {
+                y: null
+              },
+
+              speed: 0.1,
+
+              threshold: 2,
+
+              sensitivity: 3,
+
+              // Function called while the user is zooming
+              onZoom: function() {
+                console.log(`I'm zooming!!!`);
+              },
+              // Function called once zooming is completed
+              onZoomComplete: function() {
+                console.log(`I was zoomed!!!`);
+              },
+              // Function called when wheel input occurs without modifier key
+              onZoomRejected: function() {
+                console.log(`I didn't start zooming!`);
+              }
+            }
+          }
         }
       };
     }
