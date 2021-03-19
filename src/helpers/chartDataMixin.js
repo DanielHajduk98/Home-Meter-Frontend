@@ -39,7 +39,7 @@ export const chartDataMixin = {
         datasets: [
           {
             label: "Temperature",
-            data: this["measurements/temperature"],
+            data: this.temperature,
             fill: false,
             borderColor: "#FF9800",
             pointBackgroundColor: "#FF9800"
@@ -50,7 +50,7 @@ export const chartDataMixin = {
         datasets: [
           {
             label: "Movement",
-            data: this["measurements/movement"],
+            data: this.movement,
             fill: false,
             borderColor: "#F44336",
             pointBackgroundColor: "#F44336"
@@ -61,7 +61,7 @@ export const chartDataMixin = {
         datasets: [
           {
             label: "Humidity",
-            data: this["measurements/humidity"],
+            data: this.humidity,
             fill: false,
             borderColor: "#2196F3",
             pointBackgroundColor: "#2196F3"
@@ -72,7 +72,7 @@ export const chartDataMixin = {
         datasets: [
           {
             label: "Air pressure",
-            data: this["measurements/air_pressure"],
+            data: this.air_pressure,
             fill: false,
             borderColor: "#673AB7",
             pointBackgroundColor: "#673AB7"
@@ -83,7 +83,7 @@ export const chartDataMixin = {
         datasets: [
           {
             label: "Luminosity",
-            data: this["measurements/luminosity"],
+            data: this.luminosity,
             fill: false,
             borderColor: "#FFEB3B",
             pointBackgroundColor: "#FFEB3B"
@@ -94,7 +94,7 @@ export const chartDataMixin = {
         datasets: [
           {
             label: "Heat index",
-            data: this["measurements/heatIndex"],
+            data: this.heatIndex,
             fill: false,
             borderColor: "#009688",
             pointBackgroundColor: "#009688"
@@ -105,13 +105,13 @@ export const chartDataMixin = {
   },
 
   computed: {
-    ...mapGetters([
-      "measurements/temperature",
-      "measurements/movement",
-      "measurements/air_pressure",
-      "measurements/humidity",
-      "measurements/luminosity",
-      "measurements/heatIndex"
+    ...mapGetters("measurements", [
+      "temperature",
+      "movement",
+      "air_pressure",
+      "humidity",
+      "luminosity",
+      "heatIndex"
     ]),
 
     isLoading: function() {

@@ -23,6 +23,7 @@ export default {
     options: function() {
       return {
         responsive: true,
+        maintainAspectRatio: false,
         title: {
           display: true,
           fontColor: "white",
