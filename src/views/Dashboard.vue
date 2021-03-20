@@ -176,7 +176,7 @@ export default {
       this.min = this.stripToDate(new Date());
       this.max = addDays(this.min, 1);
 
-      await this.$store.dispatch("measurements/getToday");
+      await this.$store.dispatch("measurements/getMeasurements", {});
 
       this.fillData();
     }

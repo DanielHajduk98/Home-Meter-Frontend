@@ -118,10 +118,9 @@ export default {
     },
 
     async fetchData() {
-      await this.$store.dispatch(
-        "measurements/getDay",
-        this.$route.params.date
-      );
+      await this.$store.dispatch("measurements/getMeasurements", {
+        date: this.$route.params.date
+      });
 
       this.min = this.stripToDate(this.date);
       this.max = addDays(this.min, 1);

@@ -39,33 +39,20 @@ const mutations = {
 };
 
 const actions = {
-  getToday({ commit }) {
+  getMeasurements({ commit }, { date = null, scale = "day" }) {
     commit("loader/setLoading", true, { root: true });
+
+    let URL = "measurement/";
+
+    if (date && scale === "day") {
+      URL = URL + "day";
+    } else if (scale === "month") {
+      URL = URL + "month";
+    }
 
     return new Promise((resolve, reject) => {
       api({
-        url: `measurement`,
-        method: "GET"
-      })
-        .then(resp => {
-          commit("loader/setLoading", false, { root: true });
-          commit("setMeasurements", resp.data);
-          resolve(resp);
-        })
-        .catch(err => {
-          commit("loader/setLoading", false, { root: true });
-          commit("error", err);
-          reject(err);
-        });
-    });
-  },
-
-  getDay({ commit }, date) {
-    commit("loader/setLoading", true, { root: true });
-
-    return new Promise((resolve, reject) => {
-      api({
-        url: `measurement/day`,
+        url: URL,
         method: "GET",
         params: {
           date: date
