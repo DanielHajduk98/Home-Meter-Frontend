@@ -89,12 +89,6 @@ export default {
               drag: true,
               mode: "x",
               overScaleMode: "x",
-              rangeMin: {
-                y: null
-              },
-              rangeMax: {
-                y: null
-              },
               speed: 0.1,
               threshold: 2,
               sensitivity: 3

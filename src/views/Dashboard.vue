@@ -11,6 +11,7 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-icon
+              @click.native="$vuetify.goTo($refs.hiChart)"
               v-bind="attrs"
               v-on="on"
               :color="getHeatIndexStatus.color"
@@ -37,7 +38,12 @@
       </v-col>
 
       <v-col sm="2" class="d-flex flex-column justify-center align-center">
-        <v-icon color="#FF9800" size="100" class="ma-n1">
+        <v-icon
+          @click.native="$vuetify.goTo($refs.temperatureChart)"
+          color="#FF9800"
+          size="100"
+          class="ma-n1"
+        >
           mdi-thermometer
         </v-icon>
         <div class="text-center">
@@ -51,7 +57,14 @@
       </v-col>
 
       <v-col sm="2" class="d-flex flex-column justify-center align-center">
-        <v-icon color="#F44336" size="100" class="ma-n1"> mdi-run-fast </v-icon>
+        <v-icon
+          @click.native="$vuetify.goTo($refs.movementChart)"
+          color="#F44336"
+          size="100"
+          class="ma-n1"
+        >
+          mdi-run-fast
+        </v-icon>
         <div class="text-center">
           Movement:
           {{ movement.length !== 0 ? movement[movement.length - 1].y : "" }}
@@ -59,7 +72,12 @@
       </v-col>
 
       <v-col sm="2" class="d-flex flex-column justify-center align-center">
-        <v-icon color="#FFEB3B" size="100" class="ma-n1">
+        <v-icon
+          @click.native="$vuetify.goTo($refs.luminosityChart)"
+          color="#FFEB3B"
+          size="100"
+          class="ma-n1"
+        >
           mdi-lightbulb
         </v-icon>
         <div class="text-center">
@@ -71,7 +89,12 @@
         </div>
       </v-col>
       <v-col sm="2" class="d-flex flex-column justify-center align-center">
-        <v-icon color="#673AB7" size="100" class="ma-n1">
+        <v-icon
+          @click.native="$vuetify.goTo($refs.airPressureChart)"
+          color="#673AB7"
+          size="100"
+          class="ma-n1"
+        >
           mdi-arrow-collapse-vertical
         </v-icon>
         <div class="text-center">
@@ -86,7 +109,12 @@
       </v-col>
 
       <v-col sm="2" class="d-flex flex-column justify-center align-center">
-        <v-icon color="#2196F3" size="100" class="ma-n1">
+        <v-icon
+          @click.native="$vuetify.goTo($refs.humidityChart)"
+          color="#2196F3"
+          size="100"
+          class="ma-n1"
+        >
           mdi-water
         </v-icon>
         <div class="text-center">
