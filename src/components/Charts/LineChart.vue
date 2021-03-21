@@ -24,6 +24,13 @@ export default {
   computed: {
     options: function() {
       return {
+        // animation: {
+        //   duration: 0
+        // },
+        // hover: {
+        //   animationDuration: 0
+        // },
+        // responsiveAnimationDuration: 0,
         responsive: true,
         maintainAspectRatio: false,
         title: {
@@ -51,10 +58,10 @@ export default {
               type: "time",
               time: {
                 tooltipFormat: "ll HH:mm",
-                unit: "minute",
                 displayFormats: {
                   second: "HH:mm:ss",
-                  minute: "HH:mm"
+                  minute: "HH:mm",
+                  hour: "HH:mm"
                 }
               },
               ticks: {

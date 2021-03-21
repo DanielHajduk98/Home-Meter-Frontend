@@ -19,6 +19,57 @@
         </div>
       </div>
     </div>
+
+    <v-row class="mt-4">
+      <v-col cols="12">
+        <LineChart
+          :chart-data="heatIndexDataSet"
+          title="Heat Index"
+          :min="min"
+          :max="max"
+        />
+      </v-col>
+      <v-col cols="12">
+        <LineChart
+          :chart-data="temperatureDataSet"
+          title="Temperature"
+          :min="min"
+          :max="max"
+        />
+      </v-col>
+      <v-col cols="12">
+        <LineChart
+          :chart-data="movementDataSet"
+          title="Movement"
+          :min="min"
+          :max="max"
+        />
+      </v-col>
+      <v-col cols="12">
+        <LineChart
+          :chart-data="luminosityDataSet"
+          title="Luminosity"
+          :min="min"
+          :max="max"
+        />
+      </v-col>
+      <v-col cols="12">
+        <LineChart
+          :chart-data="airPressureDataSet"
+          title="Air pressure"
+          :min="min"
+          :max="max"
+        />
+      </v-col>
+      <v-col cols="12">
+        <LineChart
+          :chart-data="humidityDataSet"
+          title="Humidity"
+          :min="min"
+          :max="max"
+        />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -35,15 +86,26 @@ import {
   format,
   isAfter
 } from "date-fns";
+import LineChart from "@/components/Charts/LineChart";
+import { chartDataMixin } from "@/helpers/chartDataMixin";
 
 export default {
   name: "Calendar",
+  components: { LineChart },
+  mixins: [chartDataMixin],
 
   data() {
     return {
       today: new Date(),
+      selectedMonth: new Date(),
+      min: new Date(),
+      max: new Date(),
       calendar: []
     };
+  },
+
+  created() {
+    this.fetchData();
   },
 
   mounted() {
@@ -51,6 +113,18 @@ export default {
   },
 
   methods: {
+    async fetchData() {
+      await this.$store.dispatch("measurements/getMeasurements", {
+        date: this.formatDate(this.selectedMonth),
+        scale: "month"
+      });
+
+      this.min = this.stripToDate(startOfMonth(this.selectedMonth));
+      this.max = this.stripToDate(endOfMonth(this.selectedMonth));
+
+      this.fillData();
+    },
+
     formatDate(day) {
       return format(day, "yyyy-MM-dd");
     },
