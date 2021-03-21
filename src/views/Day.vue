@@ -16,6 +16,8 @@
     <v-row>
       <v-col md="6" lg="4">
         <LineChart
+          @dblclick.native="$refs.hiChart.test()"
+          ref="hiChart"
           :chart-data="heatIndexDataSet"
           title="Heat Index"
           :min="min"
@@ -24,6 +26,8 @@
       </v-col>
       <v-col md="6" lg="4">
         <LineChart
+          @dblclick.native="$refs.temperatureChart.test()"
+          ref="temperatureChart"
           :chart-data="temperatureDataSet"
           title="Temperature"
           :min="min"
@@ -32,6 +36,8 @@
       </v-col>
       <v-col md="6" lg="4">
         <LineChart
+          @dblclick.native="$refs.movementChart.test()"
+          ref="movementChart"
           :chart-data="movementDataSet"
           title="Movement"
           :min="min"
@@ -40,6 +46,8 @@
       </v-col>
       <v-col md="6" lg="4">
         <LineChart
+          @dblclick.native="$refs.luminosityChart.test()"
+          ref="luminosityChart"
           :chart-data="luminosityDataSet"
           title="Luminosity"
           :min="min"
@@ -48,6 +56,8 @@
       </v-col>
       <v-col md="6" lg="4">
         <LineChart
+          @dblclick.native="$refs.airPressureChart.test()"
+          ref="airPressureChart"
           :chart-data="airPressureDataSet"
           title="Air pressure"
           :min="min"
@@ -56,6 +66,8 @@
       </v-col>
       <v-col md="6" lg="4">
         <LineChart
+          @dblclick.native="$refs.humidityChart.test()"
+          ref="humidityChart"
           :chart-data="humidityDataSet"
           title="Humidity"
           :min="min"

@@ -21,6 +21,13 @@ export default {
     }
   },
 
+  methods: {
+    test() {
+      console.log("reset zoom");
+      this.$data._chart.resetZoom();
+    }
+  },
+
   computed: {
     options: function() {
       return {
@@ -79,38 +86,18 @@ export default {
             },
             zoom: {
               enabled: true,
-
               drag: true,
-
               mode: "x",
-
               overScaleMode: "x",
-
               rangeMin: {
                 y: null
               },
               rangeMax: {
                 y: null
               },
-
               speed: 0.1,
-
               threshold: 2,
-
-              sensitivity: 3,
-
-              // Function called while the user is zooming
-              onZoom: function() {
-                console.log(`I'm zooming!!!`);
-              },
-              // Function called once zooming is completed
-              onZoomComplete: function() {
-                console.log(`I was zoomed!!!`);
-              },
-              // Function called when wheel input occurs without modifier key
-              onZoomRejected: function() {
-                console.log(`I didn't start zooming!`);
-              }
+              sensitivity: 3
             }
           }
         }
