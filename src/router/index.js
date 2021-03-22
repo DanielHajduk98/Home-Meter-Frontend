@@ -1,7 +1,14 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "@/store";
-import { parseISO, isValid, isBefore, isToday } from "date-fns";
+import {
+  parseISO,
+  isValid,
+  isBefore,
+  isToday,
+  startOfMonth,
+  differenceInCalendarDays
+} from "date-fns";
 
 Vue.use(VueRouter);
 
@@ -35,9 +42,22 @@ const routes = [
     }
   },
   {
-    path: "/calendar",
+    path: "/month/:date",
     name: "Calendar",
-    component: () => import("../views/Calendar.vue")
+    component: () => import("../views/Calendar.vue"),
+    beforeEnter: (to, from, next) => {
+      const date = parseISO(to.params.date + "-01");
+
+      if (
+        isValid(date) &&
+        differenceInCalendarDays(date, startOfMonth(new Date())) <= 0
+      ) {
+        store.commit("loader/setLoading", true, { root: true });
+        next();
+      } else {
+        next("/404");
+      }
+    }
   },
   {
     path: "/404"

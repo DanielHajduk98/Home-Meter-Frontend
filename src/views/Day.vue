@@ -143,8 +143,8 @@ export default {
 
   computed: {
     nextDisabled: function() {
-      const nextDate = addDays(this.date, 1);
-      return isToday(nextDate);
+      const nextSelect = addDays(this.date, 1);
+      return isToday(nextSelect);
     },
     getDate: function() {
       return format(parseISO(this.$route.params.date), "yyyy-MM-dd");

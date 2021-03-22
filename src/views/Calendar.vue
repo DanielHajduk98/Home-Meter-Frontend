@@ -1,5 +1,19 @@
 <template>
   <v-container>
+    <v-row>
+      <v-col>
+        <header class="d-flex flex-row justify-center align-center mx-n2">
+          <v-btn icon class="mx-2" @click="prev()">
+            <v-icon>mdi-arrow-left-circle</v-icon>
+          </v-btn>
+          <h1 class="mx-2">{{ getMonth }}</h1>
+          <v-btn icon class="mx-2" @click="next()" :disabled="nextDisabled">
+            <v-icon>mdi-arrow-right-circle</v-icon>
+          </v-btn>
+        </header>
+      </v-col>
+    </v-row>
+
     <div class="calendar">
       <div
         class="day"
@@ -96,7 +110,9 @@ import {
   endOfISOWeek,
   isToday,
   format,
-  isAfter
+  isAfter,
+  parseISO,
+  addMonths
 } from "date-fns";
 import LineChart from "@/components/Charts/LineChart";
 import { chartDataMixin } from "@/helpers/chartDataMixin";
@@ -116,12 +132,24 @@ export default {
     };
   },
 
-  created() {
-    this.fetchData();
+  async created() {
+    const date = this.$route.params.date + "-01";
+
+    this.selectedMonth = parseISO(date);
+    await this.fetchData();
+    this.createMatrix();
   },
 
-  mounted() {
-    this.createMatrix();
+  watch: {
+    "$route.params.date": async function() {
+      console.log("watcher");
+
+      const date = this.$route.params.date + "-01";
+      this.selectedMonth = parseISO(date);
+
+      await this.fetchData();
+      this.createMatrix();
+    }
   },
 
   methods: {
@@ -154,8 +182,8 @@ export default {
 
       const matrix = eachWeekOfInterval(
         {
-          start: startOfMonth(this.today),
-          end: endOfMonth(this.today)
+          start: startOfMonth(this.selectedMonth),
+          end: endOfMonth(this.selectedMonth)
         },
         { weekStartsOn: 1 }
       );
@@ -165,7 +193,7 @@ export default {
           start: startOfISOWeek(weekDay),
           end: endOfISOWeek(weekDay)
         }).map(day => {
-          if (isSameMonth(this.today, day)) {
+          if (isSameMonth(this.selectedMonth, day)) {
             calendar.push(day);
           } else {
             calendar.push(null);
@@ -174,6 +202,30 @@ export default {
       );
 
       this.calendar = calendar;
+    },
+
+    prev() {
+      let selectedMonth = addMonths(this.selectedMonth, -1);
+
+      this.$router.push("/month/" + format(selectedMonth, "yyyy-MM"));
+      this.selectedMonth = selectedMonth;
+    },
+
+    next() {
+      let selectedMonth = addMonths(this.selectedMonth, 1);
+
+      this.$router.push("/month/" + format(selectedMonth, "yyyy-MM"));
+      this.selectedMonth = selectedMonth;
+    }
+  },
+
+  computed: {
+    getMonth: function() {
+      return format(this.selectedMonth, "MMMM");
+    },
+
+    nextDisabled: function() {
+      return isSameMonth(this.selectedMonth, this.today);
     }
   }
 };

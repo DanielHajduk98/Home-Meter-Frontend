@@ -8,7 +8,7 @@
       <span class="mr-2">Dashboard</span>
       <v-icon>mdi-view-dashboard</v-icon>
     </v-btn>
-    <v-btn to="/calendar" color="primary">
+    <v-btn :to="'/month/' + date" color="primary">
       <span class="mr-2">Calendar</span>
       <v-icon>mdi-calendar</v-icon>
     </v-btn>
@@ -17,7 +17,19 @@
 
 <script>
 export default {
-  name: "Navbar"
+  name: "Navbar",
+
+  data() {
+    return {
+      date: new Date()
+    };
+  },
+
+  created() {
+    const month = this.date.getMonth() + 1;
+    this.date =
+      this.date.getFullYear() + "-" + (month <= 9 ? "0" + month : month);
+  }
 };
 </script>
 
