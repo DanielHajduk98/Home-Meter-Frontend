@@ -1,18 +1,18 @@
 <template>
   <v-container>
-    <!--    <v-row>-->
-    <!--      <v-col>-->
-    <!--        <header class="d-flex flex-row justify-center align-center mx-n2">-->
-    <!--          <v-btn icon class="mx-2" @click="prev()">-->
-    <!--            <v-icon>mdi-arrow-left-circle</v-icon>-->
-    <!--          </v-btn>-->
-    <!--          <h1 class="mx-2">{{ getYear }}</h1>-->
-    <!--          <v-btn icon class="mx-2" @click="next()" :disabled="nextDisabled">-->
-    <!--            <v-icon>mdi-arrow-right-circle</v-icon>-->
-    <!--          </v-btn>-->
-    <!--        </header>-->
-    <!--      </v-col>-->
-    <!--    </v-row>-->
+    <v-row>
+      <v-col>
+        <header class="d-flex flex-row justify-center align-center mx-n2">
+          <v-btn icon class="mx-2" @click="prev()">
+            <v-icon>mdi-arrow-left-circle</v-icon>
+          </v-btn>
+          <h1 class="mx-2">{{ getYear }}</h1>
+          <v-btn icon class="mx-2" @click="next()" :disabled="nextDisabled">
+            <v-icon>mdi-arrow-right-circle</v-icon>
+          </v-btn>
+        </header>
+      </v-col>
+    </v-row>
 
     <v-row class="calendar">
       <v-col
@@ -111,7 +111,7 @@ import {
   format,
   isAfter,
   parseISO,
-  addMonths,
+  addYears,
   isSameYear,
   isThisMonth,
   differenceInCalendarMonths
@@ -143,9 +143,9 @@ export default {
   },
 
   watch: {
-    "$route.params.date": async function() {
-      const date = this.$route.params.year + "-01";
-      this.selectedMonth = parseISO(date);
+    "$route.params.year": async function() {
+      const year = this.$route.params.year + "-01-01";
+      this.selectedYear = parseISO(year);
 
       await this.fetchData();
       this.createMatrix();
@@ -198,21 +198,21 @@ export default {
     },
 
     prev() {
-      let selectedYear = addMonths(this.selectedYear, -1);
+      let selectedYear = addYears(this.selectedYear, -1);
 
-      this.$router.push("/month/" + format(selectedYear, "yyyy-MM"));
+      this.$router.push("/year/" + format(selectedYear, "yyyy"));
     },
 
     next() {
-      let selectedYear = addMonths(this.selectedYear, 1);
+      let selectedYear = addYears(this.selectedYear, 1);
 
-      this.$router.push("/month/" + format(selectedYear, "yyyy-MM"));
+      this.$router.push("/year/" + format(selectedYear, "yyyy"));
     }
   },
 
   computed: {
-    getMonth: function() {
-      return format(this.selectedYear, "MMMM");
+    getYear: function() {
+      return format(this.selectedYear, "yyyy");
     },
 
     nextDisabled: function() {
