@@ -8,10 +8,25 @@
       <span class="mr-2">Dashboard</span>
       <v-icon>mdi-view-dashboard</v-icon>
     </v-btn>
-    <v-btn :to="'/month/' + date" color="primary">
-      <span class="mr-2">Calendar</span>
-      <v-icon>mdi-calendar</v-icon>
-    </v-btn>
+
+    <v-menu offset-y>
+      <template v-slot:activator="{ attrs, on }">
+        <v-btn v-bind="attrs" v-on="on" color="primary">
+          <span class="mr-2">Calendar</span>
+          <v-icon>mdi-calendar</v-icon>
+        </v-btn>
+      </template>
+
+      <v-list>
+        <v-list-item link :to="'/month/' + month">
+          <v-list-item-title>month</v-list-item-title>
+        </v-list-item>
+
+        <v-list-item link :to="'/year/' + year">
+          <v-list-item-title>year</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
   </v-app-bar>
 </template>
 
@@ -21,14 +36,17 @@ export default {
 
   data() {
     return {
-      date: new Date()
+      month: new Date(),
+      year: new Date()
     };
   },
 
   created() {
-    const month = this.date.getMonth() + 1;
-    this.date =
-      this.date.getFullYear() + "-" + (month <= 9 ? "0" + month : month);
+    const today = new Date();
+    const month = today.getMonth() + 1;
+
+    this.month = today.getFullYear() + "-" + (month <= 9 ? "0" + month : today);
+    this.year = today.getFullYear();
   }
 };
 </script>

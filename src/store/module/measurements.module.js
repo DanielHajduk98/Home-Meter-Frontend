@@ -48,6 +48,8 @@ const actions = {
       URL = URL + "day";
     } else if (scale === "month") {
       URL = URL + "month";
+    } else if (scale === "year") {
+      URL = URL + "year";
     }
 
     return new Promise((resolve, reject) => {

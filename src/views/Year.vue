@@ -1,38 +1,41 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col>
-        <header class="d-flex flex-row justify-center align-center mx-n2">
-          <v-btn icon class="mx-2" @click="prev()">
-            <v-icon>mdi-arrow-left-circle</v-icon>
-          </v-btn>
-          <h1 class="mx-2">{{ getMonth }}</h1>
-          <v-btn icon class="mx-2" @click="next()" :disabled="nextDisabled">
-            <v-icon>mdi-arrow-right-circle</v-icon>
-          </v-btn>
-        </header>
-      </v-col>
-    </v-row>
+    <!--    <v-row>-->
+    <!--      <v-col>-->
+    <!--        <header class="d-flex flex-row justify-center align-center mx-n2">-->
+    <!--          <v-btn icon class="mx-2" @click="prev()">-->
+    <!--            <v-icon>mdi-arrow-left-circle</v-icon>-->
+    <!--          </v-btn>-->
+    <!--          <h1 class="mx-2">{{ getYear }}</h1>-->
+    <!--          <v-btn icon class="mx-2" @click="next()" :disabled="nextDisabled">-->
+    <!--            <v-icon>mdi-arrow-right-circle</v-icon>-->
+    <!--          </v-btn>-->
+    <!--        </header>-->
+    <!--      </v-col>-->
+    <!--    </v-row>-->
 
-    <div class="calendar">
-      <div
-        class="day"
-        :class="{ 'day--today': dayIsToday(day) }"
-        v-for="(day, index) in calendar"
+    <v-row class="calendar">
+      <v-col
+        cols="6"
+        sm="4"
+        xl="3"
+        v-for="(month, index) in calendar"
         :key="index"
       >
-        <router-link
-          v-if="day && !isAfterToday(day)"
-          :to="dayIsToday(day) ? '/' : '/day/' + formatDate(day)"
-          class="day__content"
-        >
-          {{ day.getDate() }}
-        </router-link>
-        <div v-else class="day__content">
-          {{ day ? day.getDate() : "" }}
+        <div class="month" :class="{ 'month--current': month.isCurrent }">
+          <router-link
+            v-if="month.isAfter"
+            :to="'/month/' + formatDate(month.date)"
+            class="month__content"
+          >
+            {{ month.monthName }}
+          </router-link>
+          <div v-else class="month__content">
+            {{ month.monthName }}
+          </div>
         </div>
-      </div>
-    </div>
+      </v-col>
+    </v-row>
 
     <v-row class="mt-4">
       <v-col cols="12">
@@ -101,18 +104,17 @@
 
 <script>
 import {
-  startOfMonth,
-  endOfMonth,
-  eachWeekOfInterval,
-  eachDayOfInterval,
-  isSameMonth,
-  startOfISOWeek,
-  endOfISOWeek,
+  startOfYear,
+  endOfYear,
+  eachMonthOfInterval,
   isToday,
   format,
   isAfter,
   parseISO,
-  addMonths
+  addMonths,
+  isSameYear,
+  isThisMonth,
+  differenceInCalendarMonths
 } from "date-fns";
 import LineChart from "@/components/Charts/LineChart";
 import { chartDataMixin } from "@/helpers/chartDataMixin";
@@ -125,7 +127,7 @@ export default {
   data() {
     return {
       today: new Date(),
-      selectedMonth: new Date(),
+      selectedYear: new Date(),
       min: new Date(),
       max: new Date(),
       calendar: []
@@ -133,16 +135,16 @@ export default {
   },
 
   async created() {
-    const date = this.$route.params.date + "-01";
+    const date = this.$route.params.year + "-01-01";
+    this.selectedYear = parseISO(date);
 
-    this.selectedMonth = parseISO(date);
     await this.fetchData();
     this.createMatrix();
   },
 
   watch: {
     "$route.params.date": async function() {
-      const date = this.$route.params.date + "-01";
+      const date = this.$route.params.year + "-01";
       this.selectedMonth = parseISO(date);
 
       await this.fetchData();
@@ -151,20 +153,20 @@ export default {
   },
 
   methods: {
-    async fetchData() {
-      await this.$store.dispatch("measurements/getMeasurements", {
-        date: this.formatDate(this.selectedMonth),
-        scale: "month"
-      });
-
-      this.min = this.stripToDate(startOfMonth(this.selectedMonth));
-      this.max = this.stripToDate(endOfMonth(this.selectedMonth));
-
-      this.fillData();
+    formatDate(date) {
+      return format(date, "yyyy-MM");
     },
 
-    formatDate(day) {
-      return format(day, "yyyy-MM-dd");
+    async fetchData() {
+      await this.$store.dispatch("measurements/getMeasurements", {
+        date: format(this.selectedYear, "yyyy-MM-dd"),
+        scale: "year"
+      });
+
+      this.min = startOfYear(this.selectedYear);
+      this.max = endOfYear(this.selectedYear);
+
+      this.fillData();
     },
 
     dayIsToday(day) {
@@ -178,50 +180,43 @@ export default {
     createMatrix() {
       let calendar = [];
 
-      const matrix = eachWeekOfInterval(
-        {
-          start: startOfMonth(this.selectedMonth),
-          end: endOfMonth(this.selectedMonth)
-        },
-        { weekStartsOn: 1 }
-      );
+      const matrix = eachMonthOfInterval({
+        start: startOfYear(this.selectedYear),
+        end: endOfYear(this.selectedYear)
+      });
 
-      matrix.map(weekDay =>
-        eachDayOfInterval({
-          start: startOfISOWeek(weekDay),
-          end: endOfISOWeek(weekDay)
-        }).map(day => {
-          if (isSameMonth(this.selectedMonth, day)) {
-            calendar.push(day);
-          } else {
-            calendar.push(null);
-          }
-        })
-      );
+      matrix.map(month => {
+        calendar.push({
+          date: month,
+          monthName: format(month, "MMMM"),
+          isCurrent: isThisMonth(month),
+          isAfter: differenceInCalendarMonths(month, this.today) <= 0
+        });
+      });
 
       this.calendar = calendar;
     },
 
     prev() {
-      let selectedMonth = addMonths(this.selectedMonth, -1);
+      let selectedYear = addMonths(this.selectedYear, -1);
 
-      this.$router.push("/month/" + format(selectedMonth, "yyyy-MM"));
+      this.$router.push("/month/" + format(selectedYear, "yyyy-MM"));
     },
 
     next() {
-      let selectedMonth = addMonths(this.selectedMonth, 1);
+      let selectedYear = addMonths(this.selectedYear, 1);
 
-      this.$router.push("/month/" + format(selectedMonth, "yyyy-MM"));
+      this.$router.push("/month/" + format(selectedYear, "yyyy-MM"));
     }
   },
 
   computed: {
     getMonth: function() {
-      return format(this.selectedMonth, "MMMM");
+      return format(this.selectedYear, "MMMM");
     },
 
     nextDisabled: function() {
-      return isSameMonth(this.selectedMonth, this.today);
+      return isSameYear(this.selectedYear, this.today);
     }
   }
 };
@@ -229,22 +224,15 @@ export default {
 
 <style lang="scss" scoped>
 .calendar {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  border: 1px solid black;
+  height: 90vh;
 }
 
-.day {
+.month {
   position: relative;
   border: 1px solid black;
+  height: 100%;
 
-  &::before {
-    content: "";
-    display: block;
-    padding-top: 100%;
-  }
-
-  &--today {
+  &--current {
     background-color: var(--v-primary-base);
   }
 

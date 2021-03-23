@@ -7,7 +7,8 @@ import {
   isBefore,
   isToday,
   startOfMonth,
-  differenceInCalendarDays
+  differenceInCalendarDays,
+  differenceInCalendarYears
 } from "date-fns";
 
 Vue.use(VueRouter);
@@ -52,6 +53,21 @@ const routes = [
         isValid(date) &&
         differenceInCalendarDays(date, startOfMonth(new Date())) <= 0
       ) {
+        store.commit("loader/setLoading", true, { root: true });
+        next();
+      } else {
+        next("/404");
+      }
+    }
+  },
+  {
+    path: "/year/:year",
+    name: "Calendar",
+    component: () => import("../views/Year.vue"),
+    beforeEnter: (to, from, next) => {
+      const year = parseISO(to.params.year + "-01" + "-01");
+
+      if (isValid(year) && differenceInCalendarYears(year, new Date()) <= 0) {
         store.commit("loader/setLoading", true, { root: true });
         next();
       } else {
