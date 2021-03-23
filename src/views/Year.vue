@@ -18,7 +18,7 @@
       <v-col
         cols="6"
         sm="4"
-        xl="3"
+        lg="3"
         v-for="(month, index) in calendar"
         :key="index"
       >

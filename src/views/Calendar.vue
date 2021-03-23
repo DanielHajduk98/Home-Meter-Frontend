@@ -217,7 +217,7 @@ export default {
 
   computed: {
     getMonth: function() {
-      return format(this.selectedMonth, "MMMM");
+      return format(this.selectedMonth, "MMMM yyyy");
     },
 
     nextDisabled: function() {
