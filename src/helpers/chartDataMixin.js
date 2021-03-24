@@ -25,6 +25,12 @@ export const chartDataMixin = {
     };
   },
 
+  watch: {
+    temperature: function() {
+      this.fillData();
+    }
+  },
+
   methods: {
     stripToDate(date) {
       date = setHours(date, 0);

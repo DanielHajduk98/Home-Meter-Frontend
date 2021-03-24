@@ -1,4 +1,5 @@
 import api from "@/helpers/api";
+import { pusher } from "@/plugins/pusher";
 
 const state = {
   temperature: [],
@@ -22,6 +23,17 @@ const getters = {
 };
 
 const mutations = {
+  updateMeasurements(state, measurements) {
+    console.log(measurements);
+
+    state.temperature.push(measurements[0]);
+    state.movement.push(measurements[1]);
+    state.luminosity.push(measurements[2]);
+    state.air_pressure.push(measurements[3]);
+    state.humidity.push(measurements[4]);
+    state.heatIndex.push(measurements[5]);
+  },
+
   setMeasurements(state, measurements) {
     state.temperature = measurements[0];
     state.movement = measurements[1];
@@ -40,7 +52,15 @@ const mutations = {
 
 const actions = {
   getMeasurements({ commit }, { date = null, scale = "day" }) {
+    pusher.unsubscribe("measurements");
+
     commit("loader/setLoading", true, { root: true });
+
+    //TODO check if today
+    var channel = pusher.subscribe("measurements");
+    channel.bind("newMeasurement", function(data) {
+      commit("updateMeasurements", data.measurement);
+    });
 
     let URL = "measurement/";
 

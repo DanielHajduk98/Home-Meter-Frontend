@@ -95,7 +95,8 @@ html {
 }
 
 body.no-scroll {
-  overflow: hidden;
+  overflow-y: hidden !important;
+  height: 100vh;
 }
 
 .loader--true {
