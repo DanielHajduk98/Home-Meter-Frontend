@@ -1,5 +1,7 @@
 import api from "@/helpers/api";
 import { pusher } from "@/plugins/pusher";
+// eslint-disable-next-line no-unused-vars
+import { isToday, isThisMonth, isThisYear, parseISO } from "date-fns";
 
 const state = {
   temperature: [],
@@ -24,8 +26,6 @@ const getters = {
 
 const mutations = {
   updateMeasurements(state, measurements) {
-    console.log(measurements);
-
     state.temperature.push(measurements[0]);
     state.movement.push(measurements[1]);
     state.luminosity.push(measurements[2]);
@@ -56,13 +56,21 @@ const actions = {
 
     commit("loader/setLoading", true, { root: true });
 
-    //TODO check if today
-    var channel = pusher.subscribe("measurements");
-    channel.bind("newMeasurement", function(data) {
-      commit("updateMeasurements", data.measurement);
-    });
-
     let URL = "measurement/";
+
+    const parsedDate = date === null ? null : parseISO(date);
+
+    if (
+      date === null ||
+      (scale === "month" && isThisMonth(parsedDate)) ||
+      (scale === "year" && isThisYear(parsedDate))
+    ) {
+      var channel = pusher.subscribe("measurements");
+
+      channel.bind("newMeasurement", function(data) {
+        commit("updateMeasurements", data.measurement);
+      });
+    }
 
     if (date && scale === "day") {
       URL = URL + "day";

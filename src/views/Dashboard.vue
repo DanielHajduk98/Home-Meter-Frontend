@@ -230,7 +230,6 @@ export default {
           : "";
 
       if (26 <= heatIndex && heatIndex <= 32) {
-        console.log("asdf");
         return { icon: "mdi-emoticon-neutral", color: "#FFEE58" };
       } else if (32 < heatIndex && heatIndex <= 41) {
         return { icon: "mdi-emoticon-confused", color: "#FFC107" };

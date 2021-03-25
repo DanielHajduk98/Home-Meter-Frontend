@@ -23,7 +23,6 @@ export default {
 
   methods: {
     test() {
-      console.log("reset zoom");
       this.$data._chart.resetZoom();
     }
   },
