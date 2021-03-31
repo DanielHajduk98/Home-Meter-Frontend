@@ -15,7 +15,12 @@ const getters = {
 
 const mutations = {
   updateMeasurements(state, measurements) {
-    state.measurements.push(measurements);
+    state.measurements.forEach((node, index) => {
+      state.measurements[index].data.push({
+        x: measurements[index].x,
+        y: parseFloat(measurements[index].y)
+      });
+    });
   },
 
   setMeasurements(state, measurements) {
@@ -67,15 +72,6 @@ const actions = {
         }
       })
         .then(resp => {
-          // resp.data.forEach((measurements, index) => {
-          //   resp.data[index].data.forEach((node, j) => {
-          //     const date = new Date(node.x);
-          //
-          //     // Date needs to be parsed
-          //     // https://apexcharts.com/docs/series/
-          //     resp.data[index].data[j].x = Date.parse(date);
-          //   });
-          // });
           commit("loader/setLoading", false, { root: true });
           commit("setMeasurements", resp.data);
           resolve(resp);

@@ -66,9 +66,13 @@ export const chartDataMixin = {
   },
 
   watch: {
-    measurements: function() {
-      console.log("watch");
-      this.fillData();
+    measurements: {
+      deep: true,
+
+      handler() {
+        console.log("watch");
+        this.fillData();
+      }
     }
   },
 
