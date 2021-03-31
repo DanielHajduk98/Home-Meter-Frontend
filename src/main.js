@@ -4,6 +4,28 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import "./plugins/pusher";
+import VueApexCharts from "vue-apexcharts";
+
+Vue.use(VueApexCharts);
+window.Apex = {
+  chart: {
+    background: "transparent",
+    animations: {
+      easing: "easein"
+    }
+  },
+  theme: {
+    mode: "dark"
+  },
+  xaxis: {
+    type: "datetime",
+    labels: {
+      datetimeUTC: false,
+    }
+  }
+};
+
+Vue.component("apexchart", VueApexCharts);
 
 Vue.config.productionTip = false;
 

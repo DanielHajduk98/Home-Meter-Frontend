@@ -15,77 +15,17 @@
     </v-row>
     <v-row>
       <v-col md="6" lg="4">
-        <LineChart
-          @dblclick.native="$refs.hiChart.test()"
-          ref="hiChart"
-          :chart-data="heatIndexDataSet"
-          title="Heat Index"
-          :min="min"
-          :max="max"
-        />
-      </v-col>
-      <v-col md="6" lg="4">
-        <LineChart
-          @dblclick.native="$refs.temperatureChart.test()"
-          ref="temperatureChart"
-          :chart-data="temperatureDataSet"
-          title="Temperature"
-          :min="min"
-          :max="max"
-        />
-      </v-col>
-      <v-col md="6" lg="4">
-        <LineChart
-          @dblclick.native="$refs.movementChart.test()"
-          ref="movementChart"
-          :chart-data="movementDataSet"
-          title="Movement"
-          :min="min"
-          :max="max"
-        />
-      </v-col>
-      <v-col md="6" lg="4">
-        <LineChart
-          @dblclick.native="$refs.luminosityChart.test()"
-          ref="luminosityChart"
-          :chart-data="luminosityDataSet"
-          title="Luminosity"
-          :min="min"
-          :max="max"
-        />
-      </v-col>
-      <v-col md="6" lg="4">
-        <LineChart
-          @dblclick.native="$refs.airPressureChart.test()"
-          ref="airPressureChart"
-          :chart-data="airPressureDataSet"
-          title="Air pressure"
-          :min="min"
-          :max="max"
-        />
-      </v-col>
-      <v-col md="6" lg="4">
-        <LineChart
-          @dblclick.native="$refs.humidityChart.test()"
-          ref="humidityChart"
-          :chart-data="humidityDataSet"
-          title="Humidity"
-          :min="min"
-          :max="max"
-        />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import LineChart from "@/components/Charts/LineChart";
 import { parseISO, isToday, addDays, format } from "date-fns";
 import { chartDataMixin } from "@/helpers/chartDataMixin";
 
 export default {
   name: "Day",
-  components: { LineChart },
 
   mixins: [chartDataMixin],
 
