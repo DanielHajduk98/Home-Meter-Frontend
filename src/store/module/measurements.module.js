@@ -1,11 +1,11 @@
 import api from "@/helpers/api";
 import { pusher } from "@/plugins/pusher";
 // eslint-disable-next-line no-unused-vars
-import { isToday, isThisMonth, isThisYear, parseISO } from "date-fns";
+import { isToday, isThisMonth, isThisYear, parseISO, format } from "date-fns";
 
 const state = {
   isLoading: true,
-  measurements: [[]],
+  measurements: [],
   error: ""
 };
 
@@ -69,7 +69,11 @@ const actions = {
         .then(resp => {
           resp.data.forEach((measurements, index) => {
             resp.data[index].data.forEach((node, j) => {
-              resp.data[index].data[j].x = new Date(node.x);
+              const date = new Date(node.x);
+
+              // Date needs to be parsed
+              // https://apexcharts.com/docs/series/
+              resp.data[index].data[j].x = Date.parse(date);
             });
           });
           commit("loader/setLoading", false, { root: true });

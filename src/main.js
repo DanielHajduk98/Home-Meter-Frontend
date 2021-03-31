@@ -8,6 +8,11 @@ import VueApexCharts from "vue-apexcharts";
 
 Vue.use(VueApexCharts);
 window.Apex = {
+  tooltip: {
+    x: {
+      format: "HH:mm dd/MM/yy"
+    }
+  },
   chart: {
     background: "transparent",
     animations: {
@@ -20,7 +25,7 @@ window.Apex = {
   xaxis: {
     type: "datetime",
     labels: {
-      datetimeUTC: false,
+      datetimeUTC: false
     }
   }
 };

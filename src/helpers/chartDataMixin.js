@@ -6,27 +6,51 @@ export const chartDataMixin = {
     return {
       chartsData: [
         {
-          options: {},
+          options: {
+            chart: {
+              id: "heatIndex"
+            }
+          },
           series: [{ data: [] }]
         },
         {
-          options: {},
+          options: {
+            chart: {
+              id: "temperature"
+            }
+          },
           series: [{ data: [] }]
         },
         {
-          options: {},
+          options: {
+            chart: {
+              id: "movement"
+            }
+          },
           series: [{ data: [] }]
         },
         {
-          options: {},
+          options: {
+            chart: {
+              id: "luminosity"
+            }
+          },
           series: [{ data: [] }]
         },
         {
-          options: {},
+          options: {
+            chart: {
+              id: "airPressure"
+            }
+          },
           series: [{ data: [] }]
         },
         {
-          options: {},
+          options: {
+            chart: {
+              id: "humidity"
+            }
+          },
           series: [{ data: [] }]
         }
       ]
@@ -35,6 +59,10 @@ export const chartDataMixin = {
 
   created() {
     this.fillData();
+  },
+
+  mounted() {
+    this.setOptions();
   },
 
   watch: {
@@ -55,14 +83,6 @@ export const chartDataMixin = {
 
     fillData() {
       this.measurements.forEach((measurement, index) => {
-        this.chartsData[index].options = {
-          xaxis: {
-            min: this.min,
-            max: this.max
-          },
-          colors: this.getColors(measurement.name)
-        };
-
         this.chartsData[index].series = [
           {
             name: measurement.name,
@@ -72,19 +92,35 @@ export const chartDataMixin = {
       });
     },
 
+    setOptions() {
+      this.chartsData.forEach(chart => {
+        const id = chart.options.chart.id;
+        this.$refs[id][0].updateOptions({
+          title: {
+            text: id
+          },
+          colors: this.getColors(id),
+          xaxis: {
+            min: this.min,
+            max: this.max
+          }
+        });
+      });
+    },
+
     getColors(name) {
       switch (name) {
-        case "Temperature":
+        case "temperature":
           return ["#FF9800"];
-        case "Movement":
+        case "movement":
           return ["#F44336"];
-        case "Humidity":
+        case "humidity":
           return ["#2196F3"];
-        case "Air Pressure":
+        case "airPressure":
           return ["#673AB7"];
-        case "Luminosity":
+        case "luminosity":
           return ["#FFEB3B"];
-        case "Heat index":
+        case "heatIndex":
           return ["#009688"];
         default:
           return ["#fff"];
