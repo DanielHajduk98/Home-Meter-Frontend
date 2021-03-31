@@ -14,7 +14,20 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col md="6" lg="4">
+      <v-col
+        v-for="(chart, index) in chartsData"
+        :key="index"
+        md="6"
+        lg="4"
+        class="py-2"
+      >
+        <apexchart
+          height="450"
+          type="line"
+          :ref="chart.options.chart.id"
+          :options="chart.options"
+          :series="chart.series"
+        ></apexchart>
       </v-col>
     </v-row>
   </v-container>
@@ -76,6 +89,7 @@ export default {
 
       this.min = this.stripToDate(this.date);
       this.max = addDays(this.min, 1);
+      this.setOptions();
 
       this.fillData();
     }

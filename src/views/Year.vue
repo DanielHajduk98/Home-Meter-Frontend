@@ -38,7 +38,19 @@
     </v-row>
 
     <v-row class="mt-4">
-      <v-col cols="12">
+      <v-col
+        v-for="(chart, index) in chartsData"
+        :key="index"
+        cols="12"
+        class="py-2"
+      >
+        <apexchart
+          height="450"
+          type="line"
+          :ref="chart.options.chart.id"
+          :options="chart.options"
+          :series="chart.series"
+        ></apexchart>
       </v-col>
     </v-row>
   </v-container>
@@ -78,6 +90,9 @@ export default {
     const date = this.$route.params.year + "-01-01";
     this.selectedYear = parseISO(date);
 
+    this.min = startOfYear(this.selectedYear);
+    this.max = endOfYear(this.selectedYear);
+
     await this.fetchData();
     this.createMatrix();
   },
@@ -105,6 +120,7 @@ export default {
 
       this.min = startOfYear(this.selectedYear);
       this.max = endOfYear(this.selectedYear);
+      this.setOptions();
 
       this.fillData();
     },

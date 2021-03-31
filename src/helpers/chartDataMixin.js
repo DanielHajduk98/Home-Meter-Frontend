@@ -101,8 +101,8 @@ export const chartDataMixin = {
           },
           colors: this.getColors(id),
           xaxis: {
-            min: this.min,
-            max: this.max
+            min: Date.parse(this.min),
+            max: Date.parse(this.max)
           }
         });
       });

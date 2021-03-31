@@ -16,6 +16,7 @@ window.Apex = {
   chart: {
     background: "transparent",
     animations: {
+      enabled: false,
       easing: "easein"
     }
   },

@@ -35,7 +35,19 @@
     </div>
 
     <v-row class="mt-4">
-      <v-col cols="12">
+      <v-col
+        v-for="(chart, index) in chartsData"
+        :key="index"
+        cols="12"
+        class="py-2"
+      >
+        <apexchart
+          height="450"
+          type="line"
+          :ref="chart.options.chart.id"
+          :options="chart.options"
+          :series="chart.series"
+        ></apexchart>
       </v-col>
     </v-row>
   </v-container>
@@ -54,7 +66,8 @@ import {
   format,
   isAfter,
   parseISO,
-  addMonths
+  addMonths,
+  addDays
 } from "date-fns";
 import { chartDataMixin } from "@/helpers/chartDataMixin";
 
@@ -74,6 +87,9 @@ export default {
 
   async created() {
     const date = this.$route.params.date + "-01";
+
+    this.min = this.stripToDate(startOfMonth(this.selectedMonth));
+    this.max = this.stripToDate(addDays(endOfMonth(this.selectedMonth), 1));
 
     this.selectedMonth = parseISO(date);
     await this.fetchData();
@@ -98,7 +114,8 @@ export default {
       });
 
       this.min = this.stripToDate(startOfMonth(this.selectedMonth));
-      this.max = this.stripToDate(endOfMonth(this.selectedMonth));
+      this.max = this.stripToDate(addDays(endOfMonth(this.selectedMonth), 1));
+      this.setOptions();
 
       this.fillData();
     },

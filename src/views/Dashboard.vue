@@ -136,7 +136,7 @@
       </v-col>
     </v-row>
 
-    <hr class="my-5"/>
+    <hr class="my-5" />
 
     <v-row class="my-n2 pt-5">
       <v-col
@@ -171,6 +171,11 @@ export default {
   },
 
   created() {
+    const today = this.stripToDate(new Date());
+
+    this.min = today;
+    this.max = addDays(today, 1);
+
     this.$store.dispatch("measurements/getMeasurements", {});
 
     this.fetchData();
@@ -178,11 +183,6 @@ export default {
 
   methods: {
     async fetchData() {
-      const today = this.stripToDate(new Date());
-
-      this.min = Date.parse(today);
-      this.max = Date.parse(addDays(today, 1));
-
       await this.$store.dispatch("measurements/getMeasurements", {});
       this.fillData();
     }
