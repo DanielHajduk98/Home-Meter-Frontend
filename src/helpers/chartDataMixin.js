@@ -4,29 +4,70 @@ import { mapGetters } from "vuex";
 export const chartDataMixin = {
   data() {
     return {
-      temperatureDataSet: {
-        datasets: [{}]
-      },
-      movementDataSet: {
-        datasets: [{}]
-      },
-      humidityDataSet: {
-        datasets: [{}]
-      },
-      airPressureDataSet: {
-        datasets: [{}]
-      },
-      luminosityDataSet: {
-        datasets: [{}]
-      },
-      heatIndexDataSet: {
-        datasets: [{}]
-      }
+      chartsData: [
+        {
+          options: {
+            chart: {
+              id: "heatIndex"
+            }
+          },
+          series: [{ data: [] }]
+        },
+        {
+          options: {
+            chart: {
+              id: "temperature"
+            }
+          },
+          series: [{ data: [] }]
+        },
+        {
+          options: {
+            chart: {
+              id: "movement"
+            }
+          },
+          series: [{ data: [] }]
+        },
+        {
+          options: {
+            chart: {
+              id: "luminosity"
+            }
+          },
+          series: [{ data: [] }]
+        },
+        {
+          options: {
+            chart: {
+              id: "airPressure"
+            }
+          },
+          series: [{ data: [] }]
+        },
+        {
+          options: {
+            chart: {
+              id: "humidity"
+            }
+          },
+          series: [{ data: [] }]
+        }
+      ]
     };
   },
 
+  created() {
+    this.fillData();
+  },
+
+  mounted() {
+    this.setOptions();
+  },
+
   watch: {
-    temperature: function() {
+    measurements: function() {
+      console.log("watch");
       this.fillData();
     }
   },
@@ -41,84 +82,54 @@ export const chartDataMixin = {
     },
 
     fillData() {
-      this.temperatureDataSet = {
-        datasets: [
+      this.measurements.forEach((measurement, index) => {
+        this.chartsData[index].series = [
           {
-            label: "Temperature",
-            data: this.temperature,
-            fill: false,
-            borderColor: "#FF9800",
-            pointBackgroundColor: "#FF9800"
+            name: measurement.name,
+            data: measurement.data
           }
-        ]
-      };
-      this.movementDataSet = {
-        datasets: [
-          {
-            label: "Movement",
-            data: this.movement,
-            fill: false,
-            borderColor: "#F44336",
-            pointBackgroundColor: "#F44336"
+        ];
+      });
+    },
+
+    setOptions() {
+      this.chartsData.forEach(chart => {
+        const id = chart.options.chart.id;
+        this.$refs[id][0].updateOptions({
+          title: {
+            text: id
+          },
+          colors: this.getColors(id),
+          xaxis: {
+            min: Date.parse(this.min),
+            max: Date.parse(this.max)
           }
-        ]
-      };
-      this.humidityDataSet = {
-        datasets: [
-          {
-            label: "Humidity",
-            data: this.humidity,
-            fill: false,
-            borderColor: "#2196F3",
-            pointBackgroundColor: "#2196F3"
-          }
-        ]
-      };
-      this.airPressureDataSet = {
-        datasets: [
-          {
-            label: "Air pressure",
-            data: this.air_pressure,
-            fill: false,
-            borderColor: "#673AB7",
-            pointBackgroundColor: "#673AB7"
-          }
-        ]
-      };
-      this.luminosityDataSet = {
-        datasets: [
-          {
-            label: "Luminosity",
-            data: this.luminosity,
-            fill: false,
-            borderColor: "#FFEB3B",
-            pointBackgroundColor: "#FFEB3B"
-          }
-        ]
-      };
-      this.heatIndexDataSet = {
-        datasets: [
-          {
-            label: "Heat index",
-            data: this.heatIndex,
-            fill: false,
-            borderColor: "#009688",
-            pointBackgroundColor: "#009688"
-          }
-        ]
-      };
+        });
+      });
+    },
+
+    getColors(name) {
+      switch (name) {
+        case "temperature":
+          return ["#FF9800"];
+        case "movement":
+          return ["#F44336"];
+        case "humidity":
+          return ["#2196F3"];
+        case "airPressure":
+          return ["#673AB7"];
+        case "luminosity":
+          return ["#FFEB3B"];
+        case "heatIndex":
+          return ["#009688"];
+        default:
+          return ["#fff"];
+      }
     }
   },
 
   computed: {
-    ...mapGetters("measurements", [
-      "temperature",
-      "movement",
-      "air_pressure",
-      "humidity",
-      "luminosity",
-      "heatIndex"
-    ]),
+    ...mapGetters("measurements", ["measurements"]),
 
     isLoading: function() {
       return this.$store.getters["measurements/getLoading"];

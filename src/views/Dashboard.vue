@@ -11,7 +11,7 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-icon
-              @click.native="$vuetify.goTo($refs.hiChart)"
+              @click.native="$vuetify.goTo($refs.heatIndex[0])"
               v-bind="attrs"
               v-on="on"
               :color="getHeatIndexStatus.color"
@@ -32,14 +32,16 @@
         <div class="text-center">
           Heat index:
           {{
-            heatIndex.length !== 0 ? heatIndex[heatIndex.length - 1].y : ""
+            measurements.length && measurements[0].data.length !== 0
+              ? measurements[0].data[measurements[0].data.length - 1].y
+              : ""
           }}°C
         </div>
       </v-col>
 
       <v-col sm="2" class="d-flex flex-column justify-center align-center">
         <v-icon
-          @click.native="$vuetify.goTo($refs.temperatureChart)"
+          @click.native="$vuetify.goTo($refs.temperature[0])"
           color="#FF9800"
           size="100"
           class="ma-n1"
@@ -49,8 +51,8 @@
         <div class="text-center">
           Temperature:
           {{
-            temperature.length !== 0
-              ? temperature[temperature.length - 1].y
+            measurements.length && measurements[1].data.length !== 0
+              ? measurements[1].data[measurements[1].data.length - 1].y
               : ""
           }}°C
         </div>
@@ -58,7 +60,7 @@
 
       <v-col sm="2" class="d-flex flex-column justify-center align-center">
         <v-icon
-          @click.native="$vuetify.goTo($refs.movementChart)"
+          @click.native="$vuetify.goTo($refs.movement[0])"
           color="#F44336"
           size="100"
           class="ma-n1"
@@ -67,13 +69,17 @@
         </v-icon>
         <div class="text-center">
           Movement:
-          {{ movement.length !== 0 ? movement[movement.length - 1].y : "" }}
+          {{
+            measurements.length && measurements[2].data.length !== 0
+              ? measurements[2].data[measurements[2].data.length - 1].y
+              : ""
+          }}
         </div>
       </v-col>
 
       <v-col sm="2" class="d-flex flex-column justify-center align-center">
         <v-icon
-          @click.native="$vuetify.goTo($refs.luminosityChart)"
+          @click.native="$vuetify.goTo($refs.luminosity[0])"
           color="#FFEB3B"
           size="100"
           class="ma-n1"
@@ -83,14 +89,16 @@
         <div class="text-center">
           Luminosity:
           {{
-            luminosity.length !== 0 ? luminosity[luminosity.length - 1].y : ""
+            measurements.length && measurements[3].data.length !== 0
+              ? measurements[3].data[measurements[3].data.length - 1].y
+              : ""
           }}
           lx
         </div>
       </v-col>
       <v-col sm="2" class="d-flex flex-column justify-center align-center">
         <v-icon
-          @click.native="$vuetify.goTo($refs.airPressureChart)"
+          @click.native="$vuetify.goTo($refs.airPressure[0])"
           color="#673AB7"
           size="100"
           class="ma-n1"
@@ -100,8 +108,8 @@
         <div class="text-center">
           air_pressure:
           {{
-            air_pressure.length !== 0
-              ? air_pressure[air_pressure.length - 1].y
+            measurements.length && measurements[4].data.length !== 0
+              ? measurements[4].data[measurements[4].data.length - 1].y
               : ""
           }}
           hPa
@@ -110,7 +118,7 @@
 
       <v-col sm="2" class="d-flex flex-column justify-center align-center">
         <v-icon
-          @click.native="$vuetify.goTo($refs.humidityChart)"
+          @click.native="$vuetify.goTo($refs.humidity[0])"
           color="#2196F3"
           size="100"
           class="ma-n1"
@@ -119,114 +127,75 @@
         </v-icon>
         <div class="text-center">
           Humidity:
-          {{ humidity.length !== 0 ? humidity[humidity.length - 1].y : "" }}%
+          {{
+            measurements.length && measurements[5].data.length !== 0
+              ? measurements[5].data[measurements[5].data.length - 1].y
+              : ""
+          }}%
         </div>
       </v-col>
     </v-row>
 
-    <v-row>
-      <v-col cols="12">
-        <LineChart
-          :chart-data="heatIndexDataSet"
-          @dblclick.native="$refs.hiChart.test()"
-          ref="hiChart"
-          title="Heat Index"
-          :min="min"
-          :max="max"
-        />
-      </v-col>
-      <v-col cols="12">
-        <LineChart
-          @dblclick.native="$refs.temperatureChart.test()"
-          ref="temperatureChart"
-          :chart-data="temperatureDataSet"
-          title="Temperature"
-          :min="min"
-          :max="max"
-        />
-      </v-col>
-      <v-col cols="12">
-        <LineChart
-          @dblclick.native="$refs.movementChart.test()"
-          ref="movementChart"
-          :chart-data="movementDataSet"
-          title="Movement"
-          :min="min"
-          :max="max"
-        />
-      </v-col>
-      <v-col cols="12">
-        <LineChart
-          @dblclick.native="$refs.luminosityChart.test()"
-          ref="luminosityChart"
-          :chart-data="luminosityDataSet"
-          title="Luminosity"
-          :min="min"
-          :max="max"
-        />
-      </v-col>
-      <v-col cols="12">
-        <LineChart
-          @dblclick.native="$refs.airPressureChart.test()"
-          ref="airPressureChart"
-          :chart-data="airPressureDataSet"
-          title="Air pressure"
-          :min="min"
-          :max="max"
-        />
-      </v-col>
-      <v-col cols="12">
-        <LineChart
-          @dblclick.native="$refs.humidityChart.test()"
-          ref="humidityChart"
-          :chart-data="humidityDataSet"
-          title="Humidity"
-          :min="min"
-          :max="max"
-        />
+    <hr class="my-5" />
+
+    <v-row class="my-n2 pt-5">
+      <v-col
+        v-for="(chart, index) in chartsData"
+        :key="index"
+        cols="12"
+        class="py-2"
+      >
+        <apexchart
+          height="450"
+          type="line"
+          :ref="chart.options.chart.id"
+          :options="chart.options"
+          :series="chart.series"
+        ></apexchart>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import LineChart from "@/components/Charts/LineChart";
-import { addDays } from "date-fns";
 import { chartDataMixin } from "@/helpers/chartDataMixin";
+import { addDays } from "date-fns";
 
 export default {
   name: "Dashboard",
-  components: { LineChart },
 
   mixins: [chartDataMixin],
 
   data() {
-    return {
-      min: new Date(),
-      max: addDays(new Date(), 1)
-    };
+    return {};
   },
 
   created() {
+    const today = this.stripToDate(new Date());
+
+    this.min = today;
+    this.max = addDays(today, 1);
+
+    this.$store.dispatch("measurements/getMeasurements", {});
+
     this.fetchData();
   },
 
   methods: {
     async fetchData() {
-      this.min = this.stripToDate(new Date());
-      this.max = addDays(this.min, 1);
-
       await this.$store.dispatch("measurements/getMeasurements", {});
-
       this.fillData();
     }
   },
 
   computed: {
     getHeatIndexStatus: function() {
+      if (!this.measurements.length) {
+        return { icon: "mdi-emoticon", color: "#4CAF50" };
+      }
       const heatIndex =
-        this.heatIndex.length !== 0
-          ? this.heatIndex[this.heatIndex.length - 1].y
+        this.measurements[0].data.length !== 0
+          ? this.measurements[0].data[this.measurements[0].data.length - 1].y
           : "";
 
       if (26 <= heatIndex && heatIndex <= 32) {

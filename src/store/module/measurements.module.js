@@ -1,47 +1,25 @@
 import api from "@/helpers/api";
 import { pusher } from "@/plugins/pusher";
 // eslint-disable-next-line no-unused-vars
-import { isToday, isThisMonth, isThisYear, parseISO } from "date-fns";
+import { isToday, isThisMonth, isThisYear, parseISO, format } from "date-fns";
 
 const state = {
-  temperature: [],
-  movement: [],
-  air_pressure: [],
-  humidity: [],
-  luminosity: [],
-  heatIndex: [],
   isLoading: true,
+  measurements: [],
   error: ""
 };
 
 const getters = {
-  temperature: state => state.temperature,
-  movement: state => state.movement,
-  air_pressure: state => state.air_pressure,
-  humidity: state => state.humidity,
-  luminosity: state => state.luminosity,
-  heatIndex: state => state.heatIndex,
-  getLoading: state => state.isLoading
+  measurements: state => state.measurements
 };
 
 const mutations = {
   updateMeasurements(state, measurements) {
-    state.temperature.push(measurements[0]);
-    state.movement.push(measurements[1]);
-    state.luminosity.push(measurements[2]);
-    state.air_pressure.push(measurements[3]);
-    state.humidity.push(measurements[4]);
-    state.heatIndex.push(measurements[5]);
+    state.measurements.push(measurements);
   },
 
   setMeasurements(state, measurements) {
-    state.temperature = measurements[0];
-    state.movement = measurements[1];
-    state.luminosity = measurements[2];
-    state.air_pressure = measurements[3];
-    state.humidity = measurements[4];
-    state.heatIndex = measurements[5];
-
+    state.measurements = measurements;
     state.isLoading = false;
   },
   error(state, error) {
@@ -89,6 +67,15 @@ const actions = {
         }
       })
         .then(resp => {
+          // resp.data.forEach((measurements, index) => {
+          //   resp.data[index].data.forEach((node, j) => {
+          //     const date = new Date(node.x);
+          //
+          //     // Date needs to be parsed
+          //     // https://apexcharts.com/docs/series/
+          //     resp.data[index].data[j].x = Date.parse(date);
+          //   });
+          // });
           commit("loader/setLoading", false, { root: true });
           commit("setMeasurements", resp.data);
           resolve(resp);

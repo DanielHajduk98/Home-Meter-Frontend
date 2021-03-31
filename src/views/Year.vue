@@ -38,65 +38,19 @@
     </v-row>
 
     <v-row class="mt-4">
-      <v-col cols="12">
-        <LineChart
-          :chart-data="heatIndexDataSet"
-          @dblclick.native="$refs.hiChart.test()"
-          ref="hiChart"
-          title="Heat Index"
-          :min="min"
-          :max="max"
-        />
-      </v-col>
-      <v-col cols="12">
-        <LineChart
-          @dblclick.native="$refs.temperatureChart.test()"
-          ref="temperatureChart"
-          :chart-data="temperatureDataSet"
-          title="Temperature"
-          :min="min"
-          :max="max"
-        />
-      </v-col>
-      <v-col cols="12">
-        <LineChart
-          @dblclick.native="$refs.movementChart.test()"
-          ref="movementChart"
-          :chart-data="movementDataSet"
-          title="Movement"
-          :min="min"
-          :max="max"
-        />
-      </v-col>
-      <v-col cols="12">
-        <LineChart
-          @dblclick.native="$refs.luminosityChart.test()"
-          ref="luminosityChart"
-          :chart-data="luminosityDataSet"
-          title="Luminosity"
-          :min="min"
-          :max="max"
-        />
-      </v-col>
-      <v-col cols="12">
-        <LineChart
-          @dblclick.native="$refs.airPressureChart.test()"
-          ref="airPressureChart"
-          :chart-data="airPressureDataSet"
-          title="Air pressure"
-          :min="min"
-          :max="max"
-        />
-      </v-col>
-      <v-col cols="12">
-        <LineChart
-          @dblclick.native="$refs.humidityChart.test()"
-          ref="humidityChart"
-          :chart-data="humidityDataSet"
-          title="Humidity"
-          :min="min"
-          :max="max"
-        />
+      <v-col
+        v-for="(chart, index) in chartsData"
+        :key="index"
+        cols="12"
+        class="py-2"
+      >
+        <apexchart
+          height="450"
+          type="line"
+          :ref="chart.options.chart.id"
+          :options="chart.options"
+          :series="chart.series"
+        ></apexchart>
       </v-col>
     </v-row>
   </v-container>
@@ -116,12 +70,10 @@ import {
   isThisMonth,
   differenceInCalendarMonths
 } from "date-fns";
-import LineChart from "@/components/Charts/LineChart";
 import { chartDataMixin } from "@/helpers/chartDataMixin";
 
 export default {
   name: "Calendar",
-  components: { LineChart },
   mixins: [chartDataMixin],
 
   data() {
@@ -137,6 +89,9 @@ export default {
   async created() {
     const date = this.$route.params.year + "-01-01";
     this.selectedYear = parseISO(date);
+
+    this.min = startOfYear(this.selectedYear);
+    this.max = endOfYear(this.selectedYear);
 
     await this.fetchData();
     this.createMatrix();
@@ -165,6 +120,7 @@ export default {
 
       this.min = startOfYear(this.selectedYear);
       this.max = endOfYear(this.selectedYear);
+      this.setOptions();
 
       this.fillData();
     },
