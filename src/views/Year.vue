@@ -39,18 +39,17 @@
 
     <v-row class="mt-4">
       <v-col
-        v-for="(chart, index) in chartsData"
+        v-for="(chartData, index) in chartsData"
         :key="index"
         cols="12"
         class="py-2"
       >
-        <apexchart
-          height="450"
-          type="line"
-          :ref="chart.options.chart.id"
-          :options="chart.options"
-          :series="chart.series"
-        ></apexchart>
+        <Chart
+          :ref="chartData.id"
+          :chart-data="chartData"
+          :min="min"
+          :max="max"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -71,9 +70,11 @@ import {
   differenceInCalendarMonths
 } from "date-fns";
 import { chartDataMixin } from "@/helpers/chartDataMixin";
+import Chart from "../components/Chart";
 
 export default {
   name: "Calendar",
+  components: { Chart },
   mixins: [chartDataMixin],
 
   data() {
@@ -120,9 +121,6 @@ export default {
 
       this.min = startOfYear(this.selectedYear);
       this.max = endOfYear(this.selectedYear);
-      this.setOptions();
-
-      this.fillData();
     },
 
     dayIsToday(day) {

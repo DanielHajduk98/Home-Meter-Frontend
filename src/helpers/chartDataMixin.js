@@ -4,65 +4,8 @@ import { mapGetters } from "vuex";
 export const chartDataMixin = {
   data() {
     return {
-      chartsData: [
-        {
-          options: {
-            chart: {
-              id: "heatIndex"
-            }
-          },
-          series: [{ data: [] }]
-        },
-        {
-          options: {
-            chart: {
-              id: "temperature"
-            }
-          },
-          series: [{ data: [] }]
-        },
-        {
-          options: {
-            chart: {
-              id: "movement"
-            }
-          },
-          series: [{ data: [] }]
-        },
-        {
-          options: {
-            chart: {
-              id: "luminosity"
-            }
-          },
-          series: [{ data: [] }]
-        },
-        {
-          options: {
-            chart: {
-              id: "airPressure"
-            }
-          },
-          series: [{ data: [] }]
-        },
-        {
-          options: {
-            chart: {
-              id: "humidity"
-            }
-          },
-          series: [{ data: [] }]
-        }
-      ]
+      chartsData: [{}, {}, {}, {}, {}, {}]
     };
-  },
-
-  created() {
-    this.fillData();
-  },
-
-  mounted() {
-    this.setOptions();
   },
 
   watch: {
@@ -70,7 +13,6 @@ export const chartDataMixin = {
       deep: true,
 
       handler() {
-        console.log("watch");
         this.fillData();
       }
     }
@@ -87,47 +29,56 @@ export const chartDataMixin = {
 
     fillData() {
       this.measurements.forEach((measurement, index) => {
-        this.chartsData[index].series = [
-          {
-            name: measurement.name,
-            data: measurement.data
-          }
-        ];
-      });
-    },
-
-    setOptions() {
-      this.chartsData.forEach(chart => {
-        const id = chart.options.chart.id;
-        this.$refs[id][0].updateOptions({
-          title: {
-            text: id
-          },
-          colors: this.getColors(id),
-          xaxis: {
-            min: Date.parse(this.min),
-            max: Date.parse(this.max)
-          }
-        });
+        this.chartsData[index] = {
+          id: this.getID(measurement.name),
+          datasets: [
+            {
+              label: measurement.name,
+              data: measurement.data,
+              fill: false,
+              backgroundColor: this.getColors(measurement.name),
+              borderColor: this.getColors(measurement.name)
+            }
+          ]
+        };
       });
     },
 
     getColors(name) {
       switch (name) {
-        case "temperature":
-          return ["#FF9800"];
-        case "movement":
-          return ["#F44336"];
-        case "humidity":
-          return ["#2196F3"];
-        case "airPressure":
-          return ["#673AB7"];
-        case "luminosity":
-          return ["#FFEB3B"];
-        case "heatIndex":
-          return ["#009688"];
+        case "Temperature":
+          return "#FF9800";
+        case "Movement":
+          return "#F44336";
+        case "Humidity":
+          return "#2196F3";
+        case "Air Pressure":
+          return "#673AB7";
+        case "Luminosity":
+          return "#FFEB3B";
+        case "Heat index":
+          return "#009688";
         default:
-          return ["#fff"];
+          return "#fff";
+      }
+    },
+
+    getID(name) {
+      switch (name) {
+        case "Temperature":
+          return "temperature";
+        case "Movement":
+          return "movement";
+        case "Humidity":
+          return "humidity";
+        case "Air Pressure":
+          return "airPressure";
+        case "Luminosity":
+          return "luminosity";
+        case "Heat index":
+          return "heatIndex";
+        default:
+          return "temperature";
       }
     }
   },

@@ -138,20 +138,18 @@
 
     <hr class="my-5" />
 
-    <v-row class="my-n2 pt-5">
-      <v-col
-        v-for="(chart, index) in chartsData"
-        :key="index"
-        cols="12"
-        class="py-2"
-      >
-        <apexchart
-          height="450"
-          type="line"
-          :ref="chart.options.chart.id"
-          :options="chart.options"
-          :series="chart.series"
-        ></apexchart>
+    <v-row
+      class="my-n2 pt-5"
+      v-for="(chartData, index) in chartsData"
+      :key="index"
+    >
+      <v-col cols="12" class="py-2">
+        <Chart
+          :ref="chartData.id"
+          :chart-data="chartData"
+          :min="min"
+          :max="max"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -160,15 +158,12 @@
 <script>
 import { chartDataMixin } from "@/helpers/chartDataMixin";
 import { addDays } from "date-fns";
+import Chart from "../components/Chart";
 
 export default {
   name: "Dashboard",
-
+  components: { Chart },
   mixins: [chartDataMixin],
-
-  data() {
-    return {};
-  },
 
   created() {
     const today = this.stripToDate(new Date());
@@ -176,15 +171,12 @@ export default {
     this.min = today;
     this.max = addDays(today, 1);
 
-    this.$store.dispatch("measurements/getMeasurements", {});
-
     this.fetchData();
   },
 
   methods: {
     async fetchData() {
       await this.$store.dispatch("measurements/getMeasurements", {});
-      this.fillData();
     }
   },
 

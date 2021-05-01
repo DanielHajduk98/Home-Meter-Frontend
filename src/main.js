@@ -4,34 +4,9 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import "./plugins/pusher";
-import VueApexCharts from "vue-apexcharts";
+import Chart from "chart.js";
 
-Vue.use(VueApexCharts);
-window.Apex = {
-  tooltip: {
-    x: {
-      format: "HH:mm dd/MM/yy"
-    }
-  },
-  chart: {
-    background: "transparent",
-    animations: {
-      enabled: false,
-      easing: "easein"
-    }
-  },
-  theme: {
-    mode: "dark"
-  },
-  xaxis: {
-    type: "datetime",
-    labels: {
-      datetimeUTC: false
-    }
-  }
-};
-
-Vue.component("apexchart", VueApexCharts);
+Chart.defaults.global.defaultFontColor = "#fff";
 
 Vue.config.productionTip = false;
 
