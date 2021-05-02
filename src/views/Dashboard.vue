@@ -145,6 +145,7 @@
     >
       <v-col cols="12" class="py-2">
         <Chart
+          @click.native="handleFocus(chartData.id)"
           @dblclick.native="$refs[chartData.id][0].resetZoom()"
           :ref="chartData.id"
           :chart-data="chartData"

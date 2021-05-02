@@ -4,8 +4,13 @@ import { mapGetters } from "vuex";
 export const chartDataMixin = {
   data() {
     return {
-      chartsData: [{}, {}, {}, {}, {}, {}]
+      chartsData: [{}, {}, {}, {}, {}, {}],
+      focusSwitch: []
     };
+  },
+
+  created() {
+    this.fillFocus();
   },
 
   watch: {
@@ -19,12 +24,26 @@ export const chartDataMixin = {
   },
 
   methods: {
+    handleFocus(id) {
+      this.focusSwitch.forEach(chartID => {
+        const chart = this.$refs[chartID][0];
+        if (id === chartID) chart.focus();
+        else chart.unFocus();
+      });
+    },
+
     stripToDate(date) {
       date = setHours(date, 0);
       date = setMinutes(date, 0);
       date = setSeconds(date, 0);
 
       return date;
+    },
+
+    fillFocus() {
+      this.measurements.forEach((measurement, index) => {
+        this.focusSwitch[index] = this.getID(measurement.name);
+      });
     },
 
     fillData() {

@@ -9,6 +9,25 @@ export default {
   mixins: [reactiveProp],
   props: ["min", "max"],
   mounted() {
+    this.addPlugin({
+      id: "chartAreaBorder",
+      beforeDraw(chart) {
+        const { ctx } = chart;
+        const chartArea = chart.chartArea;
+        if (chart.options.plugins.zoom.zoom.enabled) {
+          ctx.save();
+          ctx.strokeStyle = "#999999";
+          ctx.lineWidth = 1;
+          ctx.strokeRect(
+            chartArea.left,
+            chartArea.top,
+            chartArea.right - chartArea.left,
+            chartArea.bottom - chartArea.top
+          );
+          ctx.restore();
+        }
+      }
+    });
     this.addPlugin(zoomPlugin);
     this.renderChart(this.chartData, this.options);
   },
@@ -26,6 +45,15 @@ export default {
   },
 
   methods: {
+    focus() {
+      this.$data._chart.options.plugins.zoom.zoom.enabled = !this.$data._chart
+        .options.plugins.zoom.zoom.enabled;
+      this.$data._chart.update();
+    },
+    unFocus() {
+      this.$data._chart.options.plugins.zoom.zoom.enabled = false;
+      this.$data._chart.update();
+    },
     resetZoom() {
       this.$data._chart.resetZoom();
       this.renderChart(this.chartData, this.options); // Without it min max are wrong
@@ -71,7 +99,7 @@ export default {
               mode: "x"
             },
             zoom: {
-              enabled: true,
+              enabled: false,
               mode: "x",
               overScaleMode: "x",
               speed: 0.1,
