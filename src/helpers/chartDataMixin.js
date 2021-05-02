@@ -9,10 +9,6 @@ export const chartDataMixin = {
     };
   },
 
-  mounted() {
-    this.fillFocus();
-  },
-
   watch: {
     measurements: {
       deep: true,
@@ -47,6 +43,8 @@ export const chartDataMixin = {
     },
 
     fillData() {
+      this.fillFocus();
+
       this.measurements.forEach((measurement, index) => {
         this.chartsData[index] = {
           id: this.getID(measurement.name),
