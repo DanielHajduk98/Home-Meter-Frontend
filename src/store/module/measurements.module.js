@@ -39,7 +39,7 @@ const actions = {
 
     commit("loader/setLoading", true, { root: true });
 
-    let URL = "measurement/";
+    let URL = "/api/measurement/";
 
     const parsedDate = date === null ? null : parseISO(date);
 
