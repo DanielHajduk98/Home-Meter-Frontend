@@ -9,7 +9,7 @@ export const chartDataMixin = {
     };
   },
 
-  created() {
+  mounted() {
     this.fillFocus();
   },
 
