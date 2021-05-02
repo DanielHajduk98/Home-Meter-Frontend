@@ -46,12 +46,14 @@ export default {
 
   methods: {
     focus() {
-      this.$data._chart.options.plugins.zoom.zoom.enabled = !this.$data._chart
-        .options.plugins.zoom.zoom.enabled;
+      const enabled = !this.$data._chart.options.plugins.zoom.zoom.enabled;
+      this.$data._chart.options.plugins.zoom.zoom.enabled = enabled;
+      this.$data._chart.options.plugins.zoom.pan.enabled = enabled;
       this.$data._chart.update();
     },
     unFocus() {
       this.$data._chart.options.plugins.zoom.zoom.enabled = false;
+      this.$data._chart.options.plugins.zoom.pan.enabled = false;
       this.$data._chart.update();
     },
     resetZoom() {
