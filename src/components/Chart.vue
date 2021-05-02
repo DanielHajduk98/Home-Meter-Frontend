@@ -25,6 +25,13 @@ export default {
     }
   },
 
+  methods: {
+    resetZoom() {
+      this.$data._chart.resetZoom();
+      this.renderChart(this.chartData, this.options); // Without it min max are wrong
+    }
+  },
+
   data() {
     return {
       options: {
@@ -68,7 +75,6 @@ export default {
               mode: "x",
               overScaleMode: "x",
               speed: 0.1,
-              threshold: 2,
               sensitivity: 3
             }
           }
