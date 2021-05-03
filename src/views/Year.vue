@@ -21,7 +21,7 @@
     </v-row>
 
     <v-row class="justify-center">
-      <v-col cols="12" sm="10" xl="7" class="calendar">
+      <v-col cols="12" sm="10" xl="7" class="calendar calendar--yearly">
         <div
           :key="index"
           v-for="(month, index) in calendar"
