@@ -3,46 +3,55 @@
     <v-row>
       <v-col>
         <header class="d-flex flex-row justify-center align-center mx-n2">
-          <v-btn icon class="mx-2" @click="prev()">
+          <v-btn x-large icon class="mx-2" @click="prev()">
             <v-icon>mdi-arrow-left-circle</v-icon>
           </v-btn>
-          <h1 class="mx-2">{{ getYear }}</h1>
-          <v-btn icon class="mx-2" @click="next()" :disabled="nextDisabled">
+          <h1 class="mx-2 calendar-header">{{ getYear }}</h1>
+          <v-btn
+            x-large
+            icon
+            class="mx-2"
+            @click="next()"
+            :disabled="nextDisabled"
+          >
             <v-icon>mdi-arrow-right-circle</v-icon>
           </v-btn>
         </header>
       </v-col>
     </v-row>
 
-    <v-row class="calendar">
-      <v-col
-        cols="6"
-        sm="4"
-        lg="3"
-        v-for="(month, index) in calendar"
-        :key="index"
-      >
-        <div class="month" :class="{ 'month--current': month.isCurrent }">
+    <v-row class="justify-center">
+      <v-col cols="12" sm="10" xl="7" class="calendar">
+        <div
+          :key="index"
+          v-for="(month, index) in calendar"
+          class="calendar-node"
+          :class="{ 'calendar-node--current': month.isCurrent }"
+        >
           <router-link
             v-if="month.isAfter"
             :to="'/month/' + formatDate(month.date)"
-            class="month__content"
+            class="calendar-node__content"
           >
             {{ month.monthName }}
           </router-link>
-          <div v-else class="month__content">
+          <div v-else class="calendar-node__content">
             {{ month.monthName }}
           </div>
         </div>
       </v-col>
     </v-row>
 
-    <v-row class="mt-4">
+    <v-row class="mt-xl-5">
+      <v-col cols="12" class="pa-0 d-none d-sm-block mt-sm-5">
+        <hr class="mt-5 mb-4" />
+      </v-col>
+
       <v-col
         v-for="(chartData, index) in chartsData"
         :key="index"
         cols="12"
-        class="py-2"
+        class="py-5"
       >
         <Chart
           @click.native="handleFocus(chartData.id)"
@@ -180,31 +189,16 @@ export default {
 
 <style lang="scss" scoped>
 .calendar {
-  height: 90vh;
-}
-
-.month {
-  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   border: 1px solid black;
-  height: 100%;
 
-  &--current {
-    background-color: var(--v-primary-base);
+  @media (min-width: 400px) {
+    grid-template-columns: repeat(3, 1fr);
   }
 
-  &__content {
-    color: var(--v-text-base) !important;
-    text-decoration: none;
-
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  @media (min-width: 450px) {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 </style>

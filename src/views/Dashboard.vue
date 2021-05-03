@@ -143,7 +143,7 @@
       v-for="(chartData, index) in chartsData"
       :key="index"
     >
-      <v-col cols="12" class="py-2">
+      <v-col cols="12" class="py-5">
         <Chart
           @click.native="handleFocus(chartData.id)"
           @dblclick.native="$refs[chartData.id][0].resetZoom()"

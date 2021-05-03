@@ -3,43 +3,55 @@
     <v-row>
       <v-col>
         <header class="d-flex flex-row justify-center align-center mx-n2">
-          <v-btn icon class="mx-2" @click="prev()">
+          <v-btn x-large icon class="mx-2" @click="prev()">
             <v-icon>mdi-arrow-left-circle</v-icon>
           </v-btn>
-          <h1 class="mx-2">{{ getMonth }}</h1>
-          <v-btn icon class="mx-2" @click="next()" :disabled="nextDisabled">
+          <h1 class="mx-2 calendar-header">{{ getMonth }}</h1>
+          <v-btn
+            x-large
+            icon
+            class="mx-2"
+            @click="next()"
+            :disabled="nextDisabled"
+          >
             <v-icon>mdi-arrow-right-circle</v-icon>
           </v-btn>
         </header>
       </v-col>
     </v-row>
 
-    <div class="calendar">
-      <div
-        class="day"
-        :class="{ 'day--today': dayIsToday(day) }"
-        v-for="(day, index) in calendar"
-        :key="index"
-      >
-        <router-link
-          v-if="day && !isAfterToday(day)"
-          :to="dayIsToday(day) ? '/' : '/day/' + formatDate(day)"
-          class="day__content"
+    <v-row class="justify-center">
+      <v-col cols="12" sm="10" xl="6" class="calendar">
+        <div
+          class="calendar-node"
+          :class="{ 'calendar-node--current': dayIsToday(day) }"
+          v-for="(day, index) in calendar"
+          :key="index"
         >
-          {{ day.getDate() }}
-        </router-link>
-        <div v-else class="day__content">
-          {{ day ? day.getDate() : "" }}
+          <router-link
+            v-if="day && !isAfterToday(day)"
+            :to="dayIsToday(day) ? '/' : '/day/' + formatDate(day)"
+            class="calendar-node__content"
+          >
+            {{ day.getDate() }}
+          </router-link>
+          <div v-else class="calendar-node__content">
+            {{ day ? day.getDate() : "" }}
+          </div>
         </div>
-      </div>
-    </div>
+      </v-col>
+    </v-row>
 
-    <v-row class="mt-4">
+    <v-row>
+      <v-col cols="12" class="pa-0 d-none d-sm-block mt-sm-5">
+        <hr class="mt-5 mb-4" />
+      </v-col>
+
       <v-col
         v-for="(chartData, index) in chartsData"
         :key="index"
         cols="12"
-        class="py-2"
+        class="py-5"
       >
         <Chart
           @click.native="handleFocus(chartData.id)"
@@ -189,35 +201,5 @@ export default {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   border: 1px solid black;
-}
-
-.day {
-  position: relative;
-  border: 1px solid black;
-
-  &::before {
-    content: "";
-    display: block;
-    padding-top: 100%;
-  }
-
-  &--today {
-    background-color: var(--v-primary-base);
-  }
-
-  &__content {
-    color: var(--v-text-base) !important;
-    text-decoration: none;
-
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
 }
 </style>

@@ -5,6 +5,7 @@ import store from "./store";
 import vuetify from "./plugins/vuetify";
 import "./plugins/pusher";
 import Chart from "chart.js";
+import "./style.scss";
 
 Chart.defaults.global.defaultFontColor = "#fff";
 

@@ -1,4 +1,4 @@
-# home-meter
+# Labkom
 
 ## Project setup
 ```

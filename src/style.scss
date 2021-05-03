@@ -1,0 +1,43 @@
+.calendar-header {
+  font-size: 2rem;
+  text-align: center;
+
+  @media (min-width: 400px) {
+    font-size: 2.5rem;
+  }
+
+  @media (min-width: 550px) {
+    font-size: 4rem;
+  }
+}
+
+
+.calendar-node {
+  position: relative;
+  border: 1px solid black;
+
+  &::before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+  }
+
+  &--current {
+    background-color: var(--v-primary-base);
+  }
+
+  &__content {
+    color: var(--v-text-base) !important;
+    text-decoration: none;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

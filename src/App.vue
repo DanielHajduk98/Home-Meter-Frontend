@@ -109,7 +109,7 @@ body.no-scroll {
   right: 0;
   display: flex;
   pointer-events: none;
-  justify-content: end;
+  justify-content: flex-end;
 
   & > .fab {
     pointer-events: auto;
