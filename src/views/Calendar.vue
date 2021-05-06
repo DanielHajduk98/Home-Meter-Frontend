@@ -58,8 +58,7 @@
           @dblclick.native="$refs[chartData.id][0].resetZoom()"
           :ref="chartData.id"
           :chart-data="chartData"
-          :min="min"
-          :max="max"
+          :range="range"
         />
       </v-col>
     </v-row>
@@ -94,8 +93,6 @@ export default {
     return {
       today: new Date(),
       selectedMonth: new Date(),
-      min: new Date(),
-      max: new Date(),
       calendar: []
     };
   },
@@ -103,8 +100,10 @@ export default {
   async created() {
     const date = this.$route.params.date + "-01";
 
-    this.min = this.stripToDate(startOfMonth(this.selectedMonth));
-    this.max = this.stripToDate(addDays(endOfMonth(this.selectedMonth), 1));
+    this.range = {
+      min: this.stripToDate(startOfMonth(this.selectedMonth)),
+      max: this.stripToDate(addDays(endOfMonth(this.selectedMonth), 1))
+    };
 
     this.selectedMonth = parseISO(date);
     await this.fetchData();
@@ -128,8 +127,10 @@ export default {
         scale: "month"
       });
 
-      this.min = this.stripToDate(startOfMonth(this.selectedMonth));
-      this.max = this.stripToDate(addDays(endOfMonth(this.selectedMonth), 1));
+      this.range = {
+        min: this.stripToDate(startOfMonth(this.selectedMonth)),
+        max: this.stripToDate(addDays(endOfMonth(this.selectedMonth), 1))
+      };
     },
 
     formatDate(day) {

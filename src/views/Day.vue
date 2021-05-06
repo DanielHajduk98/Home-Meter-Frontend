@@ -15,49 +15,59 @@
     </v-row>
     <v-row>
       <v-col
-        v-for="(chart, index) in chartsData"
+        v-for="(chartData, index) in chartsData"
         :key="index"
         md="6"
         lg="4"
         class="py-2"
       >
-        <apexchart
-          height="450"
-          type="line"
-          :ref="chart.options.chart.id"
-          :options="chart.options"
-          :series="chart.series"
-        ></apexchart>
+        <Chart
+          @click.native="handleFocus(chartData.id)"
+          @dblclick.native="$refs[chartData.id][0].resetZoom()"
+          :ref="chartData.id"
+          :chart-data="chartData"
+          :range="range"
+        />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import { parseISO, isToday, addDays, format } from "date-fns";
+import { addDays, format, isToday, parseISO } from "date-fns";
 import { chartDataMixin } from "@/helpers/chartDataMixin";
+import Chart from "../components/Chart";
 
 export default {
   name: "Day",
-
+  components: { Chart },
   mixins: [chartDataMixin],
 
   data() {
     return {
-      date: new Date(),
-      min: new Date(),
-      max: addDays(new Date(), 1)
+      date: new Date()
     };
   },
 
-  created() {
+  async created() {
     this.date = parseISO(this.$route.params.date);
-    this.fetchData();
+
+    const min = this.stripToDate(this.date);
+    this.range = {
+      min: min,
+      max: addDays(min, 1)
+    };
+
+    console.log(this.range.max);
+
+    await this.fetchData();
   },
 
   watch: {
-    "$route.params.date": function() {
-      this.fetchData();
+    "$route.params.date": async function() {
+      this.date = parseISO(this.$route.params.date);
+
+      await this.fetchData();
     }
   },
 
@@ -70,7 +80,6 @@ export default {
       let date = addDays(this.date, -1);
 
       this.$router.push("/day/" + this.formatDate(date));
-      this.date = date;
     },
 
     next() {
@@ -79,7 +88,6 @@ export default {
       if (isToday(date)) return;
 
       this.$router.push("/day/" + this.formatDate(date));
-      this.date = date;
     },
 
     async fetchData() {
@@ -87,11 +95,13 @@ export default {
         date: this.$route.params.date
       });
 
-      this.min = this.stripToDate(this.date);
-      this.max = addDays(this.min, 1);
-      this.setOptions();
+      const min = this.stripToDate(this.date);
+      this.range = {
+        min: min,
+        max: addDays(min, 1)
+      };
 
-      this.fillData();
+      console.log(this.range.max);
     }
   },
 
@@ -100,8 +110,9 @@ export default {
       const nextSelect = addDays(this.date, 1);
       return isToday(nextSelect);
     },
+
     getDate: function() {
-      return format(parseISO(this.$route.params.date), "yyyy-MM-dd");
+      return format(this.date, "yyyy-MM-dd");
     }
   }
 };

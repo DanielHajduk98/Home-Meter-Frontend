@@ -58,8 +58,7 @@
           @dblclick.native="$refs[chartData.id][0].resetZoom()"
           :ref="chartData.id"
           :chart-data="chartData"
-          :min="min"
-          :max="max"
+          :range="range"
         />
       </v-col>
     </v-row>
@@ -92,8 +91,6 @@ export default {
     return {
       today: new Date(),
       selectedYear: new Date(),
-      min: new Date(),
-      max: new Date(),
       calendar: []
     };
   },
@@ -102,8 +99,10 @@ export default {
     const date = this.$route.params.year + "-01-01";
     this.selectedYear = parseISO(date);
 
-    this.min = startOfYear(this.selectedYear);
-    this.max = endOfYear(this.selectedYear);
+    this.range = {
+      min: startOfYear(this.selectedYear),
+      max: endOfYear(this.selectedYear)
+    };
 
     await this.fetchData();
     this.createMatrix();
@@ -130,8 +129,10 @@ export default {
         scale: "year"
       });
 
-      this.min = startOfYear(this.selectedYear);
-      this.max = endOfYear(this.selectedYear);
+      this.range = {
+        min: startOfYear(this.selectedYear),
+        max: endOfYear(this.selectedYear)
+      };
     },
 
     dayIsToday(day) {

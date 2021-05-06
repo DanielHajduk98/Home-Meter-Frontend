@@ -7,7 +7,8 @@ const { reactiveProp } = mixins;
 export default {
   extends: Line,
   mixins: [reactiveProp],
-  props: ["min", "max"],
+  props: ["range"],
+
   mounted() {
     this.addPlugin({
       id: "chartAreaBorder",
@@ -33,13 +34,9 @@ export default {
   },
 
   watch: {
-    min: function() {
-      this.$data._chart.destroy();
-      this.renderChart(this.chartData, this.options);
-    },
-
-    max: function() {
-      this.$data._chart.destroy();
+    range: function() {
+      this.options.scales.xAxes[0].ticks.min = this.range.min;
+      this.options.scales.xAxes[0].ticks.max = this.range.max;
       this.renderChart(this.chartData, this.options);
     }
   },
@@ -58,7 +55,6 @@ export default {
     },
     resetZoom() {
       this.$data._chart.resetZoom();
-      this.renderChart(this.chartData, this.options); // Without it min max are wrong
     }
   },
 
@@ -82,14 +78,15 @@ export default {
               time: {
                 tooltipFormat: "ll HH:mm",
                 displayFormats: {
+                  millisecond: "HH:mm:ss.SSS",
                   second: "HH:mm:ss",
                   minute: "HH:mm",
                   hour: "HH:mm"
                 }
               },
               ticks: {
-                min: this.min,
-                max: this.max
+                min: this.range.min,
+                max: this.range.max
               }
             }
           ]

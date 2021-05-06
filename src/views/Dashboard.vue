@@ -149,8 +149,7 @@
           @dblclick.native="$refs[chartData.id][0].resetZoom()"
           :ref="chartData.id"
           :chart-data="chartData"
-          :min="min"
-          :max="max"
+          :range="range"
         />
       </v-col>
     </v-row>
@@ -170,8 +169,10 @@ export default {
   created() {
     const today = this.stripToDate(new Date());
 
-    this.min = today;
-    this.max = addDays(today, 1);
+    this.range = {
+      min: today,
+      max: addDays(today, 1)
+    };
 
     this.fetchData();
   },

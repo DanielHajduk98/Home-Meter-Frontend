@@ -10,7 +10,6 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "apexcharts": "^3.26.0",
     "axios": "^0.21.1",
     "chart.js": "2",
     "chartjs-plugin-zoom": "^0.7.7",
@@ -18,7 +17,6 @@
     "date-fns": "^2.19.0",
     "pusher-js": "^7.0.3",
     "vue": "^2.6.11",
-    "vue-apexcharts": "^1.6.0",
     "vue-chartjs": "^3.5.1",
     "vue-router": "^3.2.0",
     "vuetify": "^2.4.0",

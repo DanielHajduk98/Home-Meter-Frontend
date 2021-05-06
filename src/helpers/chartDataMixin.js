@@ -4,6 +4,10 @@ import { mapGetters } from "vuex";
 export const chartDataMixin = {
   data() {
     return {
+      range: {
+        min: new Date(),
+        max: new Date()
+      },
       chartsData: [{}, {}, {}, {}, {}, {}],
       focusSwitch: []
     };
