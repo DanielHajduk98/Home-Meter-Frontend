@@ -24,7 +24,10 @@
       <v-col cols="12" sm="10" xl="6" class="calendar">
         <div
           class="calendar-node"
-          :class="{ 'calendar-node--current': dayIsToday(day) }"
+          :class="{
+            'calendar-node--current': dayIsToday(day),
+            'calendar-node--available': day && !isAfterToday(day)
+          }"
           v-for="(day, index) in calendar"
           :key="index"
         >

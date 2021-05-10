@@ -26,10 +26,13 @@
           :key="index"
           v-for="(month, index) in calendar"
           class="calendar-node"
-          :class="{ 'calendar-node--current': month.isCurrent }"
+          :class="{
+            'calendar-node--current': month.isCurrent,
+            'calendar-node--available': !month.isAfter
+          }"
         >
           <router-link
-            v-if="month.isAfter"
+            v-if="!month.isAfter"
             :to="'/month/' + formatDate(month.date)"
             class="calendar-node__content"
           >
@@ -159,7 +162,7 @@ export default {
           date: month,
           monthName: format(month, "MMMM"),
           isCurrent: isThisMonth(month),
-          isAfter: differenceInCalendarMonths(month, this.today) <= 0
+          isAfter: differenceInCalendarMonths(month, this.today) > 0
         });
       });
 

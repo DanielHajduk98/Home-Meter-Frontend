@@ -22,6 +22,10 @@
     padding-top: 100%;
   }
 
+  &--available {
+    background-color: var(--v-lightGrey-base);
+  }
+
   &--current {
     background-color: var(--v-primary-base);
   }

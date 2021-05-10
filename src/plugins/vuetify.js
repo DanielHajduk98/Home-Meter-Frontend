@@ -14,6 +14,7 @@ export default new Vuetify({
       dark: {
         primary: colors.blueGrey.base,
         overlay: colors.grey.darken3,
+        lightGrey: colors.grey.darken1,
         text: "#fff"
       }
     }
