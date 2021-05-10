@@ -70,6 +70,9 @@ export default {
         responsiveAnimationDuration: 0,
         responsive: true,
         maintainAspectRatio: false,
+        legend: {
+          display: false
+        },
         type: "line",
         scales: {
           xAxes: [

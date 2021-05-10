@@ -53,6 +53,9 @@
         cols="12"
         class="py-5"
       >
+        <h3 class="text-center">
+          {{ chartData.title }}
+        </h3>
         <Chart
           @click.native="handleFocus(chartData.id)"
           @dblclick.native="$refs[chartData.id][0].resetZoom()"

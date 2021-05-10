@@ -4,9 +4,9 @@ import { mapGetters } from "vuex";
 export const chartDataMixin = {
   data() {
     return {
-      range: {
+      options: {
         min: new Date(),
-        max: new Date()
+        max: new Date(),
       },
       chartsData: [{}, {}, {}, {}, {}, {}],
       focusSwitch: []
@@ -52,6 +52,7 @@ export const chartDataMixin = {
       this.measurements.forEach((measurement, index) => {
         this.chartsData[index] = {
           id: this.getID(measurement.name),
+          title: measurement.name,
           datasets: [
             {
               label: measurement.name,

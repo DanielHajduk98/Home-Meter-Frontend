@@ -2,7 +2,7 @@
   <v-container>
     <v-row class="mb-5">
       <v-col col="12" tag="header">
-        <h1 class="text-center">Today's measurements</h1>
+        <h1 class="text-center calendar-header">Today's measurements</h1>
       </v-col>
     </v-row>
 
@@ -30,7 +30,7 @@
           >
         </v-tooltip>
         <div class="text-center">
-          Heat index:
+          Heat Index:
           {{
             measurements.length && measurements[0].data.length !== 0
               ? measurements[0].data[measurements[0].data.length - 1].y
@@ -106,7 +106,7 @@
           mdi-arrow-collapse-vertical
         </v-icon>
         <div class="text-center">
-          air_pressure:
+          Air Pressure:
           {{
             measurements.length && measurements[4].data.length !== 0
               ? measurements[4].data[measurements[4].data.length - 1].y
@@ -144,6 +144,9 @@
       :key="index"
     >
       <v-col cols="12" class="py-5">
+        <h3 class="text-center">
+          {{ chartData.title }}
+        </h3>
         <Chart
           @click.native="handleFocus(chartData.id)"
           @dblclick.native="$refs[chartData.id][0].resetZoom()"
