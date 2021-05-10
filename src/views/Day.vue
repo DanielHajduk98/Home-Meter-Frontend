@@ -61,6 +61,7 @@ export default {
       max: addDays(min, 1)
     };
 
+    console.log(this.range.min);
     console.log(this.range.max);
 
     await this.fetchData();
