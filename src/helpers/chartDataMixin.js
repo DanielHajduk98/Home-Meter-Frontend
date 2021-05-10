@@ -78,7 +78,7 @@ export const chartDataMixin = {
           return "#673AB7";
         case "Luminosity":
           return "#FFEB3B";
-        case "Heat index":
+        case "Heat Index":
           return "#009688";
         default:
           return "#fff";
@@ -97,7 +97,7 @@ export const chartDataMixin = {
           return "airPressure";
         case "Luminosity":
           return "luminosity";
-        case "Heat index":
+        case "Heat Index":
           return "heatIndex";
         default:
           return "temperature";
