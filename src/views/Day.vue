@@ -3,11 +3,17 @@
     <v-row>
       <v-col>
         <header class="d-flex flex-row justify-center align-center mx-n2">
-          <v-btn icon class="mx-2" @click="prev()">
+          <v-btn x-large icon class="mx-2" @click="prev()">
             <v-icon>mdi-arrow-left-circle</v-icon>
           </v-btn>
-          <h1 class="mx-2">{{ getDate }}</h1>
-          <v-btn icon class="mx-2" @click="next()" :disabled="nextDisabled">
+          <h1 class="mx-2 calendar-header">{{ getDate }}</h1>
+          <v-btn
+            x-large
+            icon
+            class="mx-2"
+            @click="next()"
+            :disabled="nextDisabled"
+          >
             <v-icon>mdi-arrow-right-circle</v-icon>
           </v-btn>
         </header>
