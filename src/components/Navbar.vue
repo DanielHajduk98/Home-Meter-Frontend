@@ -5,7 +5,7 @@
     <v-spacer></v-spacer>
 
     <v-btn to="/" color="primary" class="mr-2">
-      <span class="mr-2">Dashboard</span>
+      <span class="mr-2">Today</span>
       <v-icon>mdi-view-dashboard</v-icon>
     </v-btn>
 

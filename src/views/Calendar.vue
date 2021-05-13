@@ -78,7 +78,6 @@ import {
   eachWeekOfInterval,
   eachDayOfInterval,
   isSameMonth,
-  startOfISOWeek,
   endOfISOWeek,
   isToday,
   format,
@@ -162,10 +161,10 @@ export default {
         { weekStartsOn: 1 }
       );
 
-      matrix.map(weekDay =>
+      matrix.map(week =>
         eachDayOfInterval({
-          start: startOfISOWeek(weekDay),
-          end: endOfISOWeek(weekDay)
+          start: week,
+          end: endOfISOWeek(week)
         }).map(day => {
           if (isSameMonth(this.selectedMonth, day)) {
             calendar.push(day);

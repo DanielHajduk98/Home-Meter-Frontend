@@ -4,7 +4,6 @@ import { pusher } from "@/plugins/pusher";
 import { isToday, isThisMonth, isThisYear, parseISO, format } from "date-fns";
 
 const state = {
-  isLoading: true,
   measurements: [],
   error: ""
 };
@@ -22,14 +21,11 @@ const mutations = {
       });
     });
   },
-
   setMeasurements(state, measurements) {
     state.measurements = measurements;
-    state.isLoading = false;
   },
   error(state, error) {
     state.error = error;
-    state.isLoading = false;
   }
 };
 
@@ -64,11 +60,13 @@ const actions = {
     }
 
     return new Promise((resolve, reject) => {
+      console.log(process.env.VUE_APP_MAC);
       api({
         url: URL,
         method: "GET",
         params: {
-          date: date
+          date: date,
+          monitor_mac: process.env.VUE_APP_MAC
         }
       })
         .then(resp => {
