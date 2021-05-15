@@ -60,7 +60,6 @@ const actions = {
     }
 
     return new Promise((resolve, reject) => {
-      console.log(process.env.VUE_APP_MAC);
       api({
         url: URL,
         method: "GET",

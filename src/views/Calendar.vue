@@ -3,10 +3,12 @@
     <v-row>
       <v-col>
         <header class="d-flex flex-row justify-center align-center mx-n2">
-          <v-btn x-large icon class="mx-2" @click="prev()">
+          <v-btn ref="btn-prev" x-large icon class="mx-2" @click="prev()">
             <v-icon>mdi-arrow-left-circle</v-icon>
           </v-btn>
-          <h1 class="mx-2 calendar-header">{{ getMonth }}</h1>
+          <h1 ref="calendar-header" class="mx-2 calendar-header">
+            {{ getMonth }}
+          </h1>
           <v-btn
             x-large
             icon
