@@ -3,22 +3,30 @@
     <v-row>
       <v-col>
         <header class="d-flex flex-row justify-center align-center mx-n2">
-          <v-btn ref="btn-prev" x-large icon class="mx-2" @click="prev()">
+          <v-btn
+            ref="btn-prev"
+            x-large
+            icon
+            class="mx-2 btn-prev"
+            @click.native="prev()"
+          >
             <v-icon>mdi-arrow-left-circle</v-icon>
           </v-btn>
           <h1 ref="calendar-header" class="mx-2 calendar-header">
             {{ getMonth }}
           </h1>
           <v-btn
+            ref="btn-next"
             x-large
             icon
-            class="mx-2"
-            @click="next()"
+            class="mx-2 btn-next"
+            @click.native="next()"
             :disabled="nextDisabled"
           >
             <v-icon>mdi-arrow-right-circle</v-icon>
           </v-btn>
         </header>
+        {{ new Date() }}
       </v-col>
     </v-row>
 
@@ -106,12 +114,6 @@ export default {
 
   async created() {
     const date = this.$route.params.date + "-01";
-
-    this.range = {
-      min: this.stripToDate(startOfMonth(this.selectedMonth)),
-      max: this.stripToDate(addDays(endOfMonth(this.selectedMonth), 1))
-    };
-
     this.selectedMonth = parseISO(date);
     await this.fetchData();
     this.createMatrix();
@@ -181,13 +183,11 @@ export default {
 
     prev() {
       let selectedMonth = addMonths(this.selectedMonth, -1);
-
       this.$router.push("/month/" + format(selectedMonth, "yyyy-MM"));
     },
 
     next() {
       let selectedMonth = addMonths(this.selectedMonth, 1);
-
       this.$router.push("/month/" + format(selectedMonth, "yyyy-MM"));
     }
   },

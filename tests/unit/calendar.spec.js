@@ -1,4 +1,4 @@
-import { mount, createLocalVue } from "@vue/test-utils";
+import { mount, createLocalVue, RouterLinkStub } from "@vue/test-utils";
 import Calendar from "../../src/views/Calendar";
 import Vuex from "vuex";
 import Vuetify from "vuetify";
@@ -14,7 +14,16 @@ const store = new Vuex.Store({
       state: {
         measurements: [
           {
-            name: "Measurement",
+            name: "Temperature",
+            data: [
+              {
+                x: 1621030143000,
+                y: 20
+              }
+            ]
+          },
+          {
+            name: "Movement",
             data: [
               {
                 x: 1621030143000,
@@ -36,32 +45,65 @@ const store = new Vuex.Store({
   }
 });
 
-const $route = {
-  path: "/month/2077-01",
+const $router = {
+  push: jest.fn()
+};
+
+let $route = {
+  path: "/month/2000-01",
   params: {
-    date: "2077-01"
+    date: "2000-01"
   }
 };
 
 describe("Calendar", () => {
-  // eslint-disable-next-line no-unused-vars
   let vuetify;
 
   beforeEach(() => {
     vuetify = new Vuetify();
   });
 
-  it("Month is changed after btn click", () => {
+  it("should push router to previous month on btn-prev click", async () => {
     const wrapper = mount(Calendar, {
-      mocks: {
-        $route
-      },
       store,
       localVue,
-      vuetify
+      vuetify,
+      mocks: {
+        $route,
+        $router
+      },
+      stubs: {
+        RouterLink: RouterLinkStub
+      }
     });
-    const header = wrapper.findComponent({ ref: "calendar-header" });
 
-    expect(header.text()).toContain("January 2077");
+    const btnPrev = wrapper.findComponent({ ref: "btn-prev" });
+
+    expect(btnPrev.exists()).toBe(true);
+    btnPrev.trigger("click");
+
+    expect($router.push).toHaveBeenCalledWith("/month/1999-12");
+  });
+
+  it("should push router to next month on btn-next click", () => {
+    const wrapper = mount(Calendar, {
+      store,
+      localVue,
+      vuetify,
+      mocks: {
+        $route,
+        $router
+      },
+      stubs: {
+        RouterLink: RouterLinkStub
+      }
+    });
+
+    const btnNext = wrapper.findComponent({ ref: "btn-next" });
+
+    expect(btnNext.exists()).toBe(true);
+    btnNext.trigger("click");
+
+    expect($router.push).toHaveBeenCalledWith("/month/2000-02");
   });
 });
