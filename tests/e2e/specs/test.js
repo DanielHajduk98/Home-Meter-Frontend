@@ -1,6 +1,4 @@
-// https://docs.cypress.io/api/introduction/api.html
-
-describe("Calendar", () => {
+describe("Calendar - month", () => {
   beforeEach(() => {
     cy.clock(new Date(2000, 1, 1).getTime());
     cy.visit("/month/2000-01");
