@@ -26,7 +26,6 @@
             <v-icon>mdi-arrow-right-circle</v-icon>
           </v-btn>
         </header>
-        {{ new Date() }}
       </v-col>
     </v-row>
 
